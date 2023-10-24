@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CarMapper {
 
-    public CarDTO fromCarToCarDTO(Car car) {
+    /*public CarDTO fromCarToCarDTO(Car car) {
         String id = Integer.toString(car.getId());
         String numberPlate = car.getNumberPlate();
         String color = car.getColor();
@@ -26,5 +26,5 @@ public class CarMapper {
         String brand = carDTO.getBrand();
 
         return new Car(id, numberPlate, color, model, brand);
-    }
+    }*/
 }

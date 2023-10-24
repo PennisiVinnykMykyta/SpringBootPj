@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 public class UserMapper {
-    private final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+   /* private final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
     public UserDTO fromUserToDto(User user) {
 
@@ -53,7 +53,7 @@ public class UserMapper {
 
         return new User(id, firstName, lastName, email, password, userType, brithDate);
 
-    }
+    }*/
 
 
 }

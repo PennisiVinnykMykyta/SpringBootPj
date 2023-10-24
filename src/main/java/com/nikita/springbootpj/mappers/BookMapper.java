@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 @Component
 public class BookMapper {
-
+/*
     public BookDTO fromBookToBookDTO(Book book) {
         CarMapper carMapper = new CarMapper();
         UserMapper userMapper = new UserMapper();
@@ -29,5 +29,5 @@ public class BookMapper {
 
         return new BookDTO(id, userDTO, carDTO, startDate, endDate, valid);
 
-    }
+    }*/
 }
