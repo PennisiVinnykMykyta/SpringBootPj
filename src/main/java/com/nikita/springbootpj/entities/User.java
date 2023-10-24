@@ -43,48 +43,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,orphanRemoval = true)
     private List<Book> bookings;
 
-    public User() {
-
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public List<Book> getBookings() {
-        return bookings;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public UserType getType() {
-        return type;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-
-    public User(Integer id, String email, String password, String firstName, String lastName, UserType type, Date birthDate) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.type = type;
-        this.birthDate = birthDate;
-    }
 
 }
 

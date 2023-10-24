@@ -37,24 +37,4 @@ public class Book {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name="approval")
     private Boolean valid;
-
-    public Book() {
-    }
-
-    public Boolean getValid() {
-        return valid;
-    }
-
-    public Car getCar() {
-        return car;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
 }

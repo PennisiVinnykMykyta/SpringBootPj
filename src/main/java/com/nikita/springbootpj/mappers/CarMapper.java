@@ -2,29 +2,30 @@ package com.nikita.springbootpj.mappers;
 
 import com.nikita.springbootpj.dto.CarDTO;
 import com.nikita.springbootpj.entities.Car;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class CarMapper {
 
-    /*public CarDTO fromCarToCarDTO(Car car) {
-        String id = Integer.toString(car.getId());
-        String numberPlate = car.getNumberPlate();
-        String color = car.getColor();
-        String model = car.getModel();
-        String brand = car.getBrand();
+    private final ModelMapper mapper;
 
-        return new CarDTO(id, numberPlate, color, model, brand);
-
+    public Car fromDtoToCar(CarDTO carDTO){
+        Car car = null;
+        if(carDTO != null){
+            car = mapper.map(carDTO,Car.class);
+        }
+        return car;
     }
 
-    public Car fromCarDTOToCar(CarDTO carDTO) {
-        Integer id = Integer.parseInt(carDTO.getId());
-        String numberPlate = carDTO.getNumberPlate();
-        String color = carDTO.getColor();
-        String model = carDTO.getModel();
-        String brand = carDTO.getBrand();
+    public CarDTO fromCarToDTO(Car car){
+        CarDTO carDTO = null;
+        if(car != null){
+            carDTO = mapper.map(car,CarDTO.class);
+        }
+        return carDTO;
+    }
 
-        return new Car(id, numberPlate, color, model, brand);
-    }*/
 }

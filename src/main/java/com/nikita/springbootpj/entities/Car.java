@@ -20,7 +20,7 @@ public class Car implements Serializable {
     @Column(name = "car_id")
     private Integer id;
 
-    @Column(name = "number_plate", unique = true)
+    @Column(name = "number_plate", nullable = false, unique = true)
     private String numberPlate;
 
     @Column(name = "color", nullable = false)
@@ -34,33 +34,5 @@ public class Car implements Serializable {
 
     @OneToMany(mappedBy = "car", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Book> bookings;
-
-    public Car(Integer id, String numberPlate, String color, String model, String brand) {
-        this.id = id;
-        this.numberPlate = numberPlate;
-        this.color = color;
-        this.model = model;
-        this.brand = brand;
-    }
-
-    public Car() {
-
-    }
-
-    public String getNumberPlate() {
-        return numberPlate;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
 
 }

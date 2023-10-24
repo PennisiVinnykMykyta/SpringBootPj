@@ -1,59 +1,31 @@
 package com.nikita.springbootpj.mappers;
 
 import com.nikita.springbootpj.dto.UserDTO;
-import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.User;
-import com.nikita.springbootpj.entities.enums.UserType;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
+@RequiredArgsConstructor
 @Component
 public class UserMapper {
-   /* private final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    private final ModelMapper mapper;
 
-    public UserDTO fromUserToDto(User user) {
-
-        String id = Integer.toString(user.getId());
-        String firstName = user.getFirstName();
-        String lastName = user.getLastName();
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String brithDate = format.format(user.getBirthDate());
-        String userType;
-        if (user.getType() == UserType.ADMIN) {
-            userType = "admin";
-        } else {
-            userType = "customer";
+    public User fromDtoToUser(UserDTO userDTO){
+        User user = null;
+        if(userDTO != null){
+            user = mapper.map(userDTO,User.class);
         }
-        List<Book> bookList = user.getBookings();
-
-        return new UserDTO(id, firstName, lastName, email, password, userType, brithDate, bookList);
-
+        return user;
     }
 
-    public User fromDtoToUser(UserDTO userDTO) throws ParseException {
+    public UserDTO fromUserToDTO(User user){
+        UserDTO userDTO = null;
 
-        Integer id = Integer.parseInt(userDTO.getId());
-        String firstName = userDTO.getFirstName();
-        String lastName = userDTO.getLastName();
-        String email = userDTO.getEmail();
-        String password = userDTO.getPassword();
-        Date brithDate = format.parse(userDTO.getBirthDate());
-        UserType userType;
-
-        if (userDTO.getUserType().equals("admin")) {
-            userType = UserType.ADMIN;
-        } else {
-            userType = UserType.CUSTOMER;
+        if(user != null){
+            userDTO = mapper.map(user, UserDTO.class);
         }
-
-        return new User(id, firstName, lastName, email, password, userType, brithDate);
-
-    }*/
-
+        return userDTO;
+    }
 
 }

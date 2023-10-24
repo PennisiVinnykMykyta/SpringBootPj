@@ -1,33 +1,41 @@
 package com.nikita.springbootpj.mappers;
 
+
 import com.nikita.springbootpj.dto.BookDTO;
-import com.nikita.springbootpj.dto.CarDTO;
-import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.entities.Book;
-import com.nikita.springbootpj.entities.Car;
-import com.nikita.springbootpj.entities.User;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-
 @Component
+@RequiredArgsConstructor
 public class BookMapper {
-/*
-    public BookDTO fromBookToBookDTO(Book book) {
-        CarMapper carMapper = new CarMapper();
-        UserMapper userMapper = new UserMapper();
 
-        int id = book.getId();
-        LocalDate startDate = book.getStartDate();
-        LocalDate endDate = book.getEndDate();
-        User user = book.getUser();
-        Car car = book.getCar();
-        Boolean valid = book.getValid();
+    private final ModelMapper mapper;
+    private final UserMapper userMapper;
+    private final CarMapper carMapper;
 
-        UserDTO userDTO = userMapper.fromUserToDto(user);
-        CarDTO carDTO = carMapper.fromCarToCarDTO(car);
+    Book fromDtoToBook(BookDTO bookDTO){
+        Book book = null;
+        if(bookDTO != null){
+            book = mapper.map(bookDTO,Book.class);
+            book.setUser(userMapper.fromDtoToUser(bookDTO.getUser()));
+            book.setCar(carMapper.fromDtoToCar(bookDTO.getCar()));
+        }
+        return book;
+    }
 
-        return new BookDTO(id, userDTO, carDTO, startDate, endDate, valid);
+    BookDTO fromBookTODTO(Book book){
+        BookDTO bookDTO = null;
+        if(book != null){
+            bookDTO = mapper.map(book,BookDTO.class);
+            bookDTO.setUser(userMapper.fromUserToDTO(book.getUser()));
+            bookDTO.setCar(carMapper.fromCarToDTO(book.getCar()));
+        }
+        return bookDTO;
+    }
 
-    }*/
+
+
+
 }
