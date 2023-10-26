@@ -25,7 +25,7 @@ public class BookMapper {
         return book;
     }
 
-    BookDTO fromBookTODTO(Book book){
+    BookDTO fromBookToDTO(Book book){
         BookDTO bookDTO = null;
         if(book != null){
             bookDTO = mapper.map(book,BookDTO.class);

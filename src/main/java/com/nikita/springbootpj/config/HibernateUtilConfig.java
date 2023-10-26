@@ -1,4 +1,4 @@
-package com.nikita.springbootpj.config;
+/*package com.nikita.springbootpj.config;
 
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.Car;
@@ -51,5 +51,5 @@ public class HibernateUtilConfig {
         }
         return sessionFactory;
     }
-}
+}*/
 

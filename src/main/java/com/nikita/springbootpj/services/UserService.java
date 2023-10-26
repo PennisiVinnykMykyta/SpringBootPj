@@ -7,11 +7,10 @@ import java.util.List;
 
 public interface UserService {
 
-    String getUserHomepage(String mail);
     UserDTO getUserById(int id);
     UserDTO getUserByCredentials(String email);
     List<UserDTO> getAllUsers();
-    String deleteUserById(int deleteID);
+    void deleteUserById(int deleteID);
 
-    String saveOrUpdateUser(UserDTO userDTO) throws ParseException;
+    void saveOrUpdateUser(UserDTO userDTO) throws ParseException;
 }

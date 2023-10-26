@@ -1,10 +1,8 @@
 package com.nikita.springbootpj.entities;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,8 +10,7 @@ import java.util.List;
 @Entity
 @Table(name ="car")
 @Data
-@Getter
-@Setter
+
 public class Car implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

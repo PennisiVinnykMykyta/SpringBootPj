@@ -1,22 +1,18 @@
 package com.nikita.springbootpj.entities;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "book")
 @Data
-@Getter
-@Setter
 public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "book_id")
+    @Column(name = "id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -27,14 +23,14 @@ public class Book {
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @Column(name="startDate")
+    @Column(name="start_date")
     private LocalDate startDate;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(name="endDate")
+    @Column(name="end_date")
     private LocalDate endDate;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(name="approval")
+    @Column(name="valid")
     private Boolean valid;
 }

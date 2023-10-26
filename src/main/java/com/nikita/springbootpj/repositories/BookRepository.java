@@ -1,19 +1,13 @@
 package com.nikita.springbootpj.repositories;
 
 import com.nikita.springbootpj.entities.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
-public interface BookRepository {
+@Repository
+public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    void deleteById(int id);
 
-    void saveOrUpdateBook(Book book);
-
-    Book findById(int id);
-
-    List<Book> findAll();
-
-    List<Book> conflictingBookings(LocalDate start, LocalDate end);
 }

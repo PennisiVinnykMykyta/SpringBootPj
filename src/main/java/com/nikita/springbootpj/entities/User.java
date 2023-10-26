@@ -2,10 +2,8 @@ package com.nikita.springbootpj.entities;
 
 import com.nikita.springbootpj.entities.enums.UserType;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,8 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Data
-@Getter
-@Setter
 public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
