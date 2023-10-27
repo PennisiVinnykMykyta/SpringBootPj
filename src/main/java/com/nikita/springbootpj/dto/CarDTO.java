@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CarDTO {
 
-    private String id;
+    private Integer id;
     private String numberPlate;
     private String color;
     private String model;

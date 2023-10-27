@@ -28,4 +28,13 @@ public class UserMapper {
         return userDTO;
     }
 
+    public UserDTO fromDTOToModify(UserDTO modifyDTO){
+        UserDTO userDTO = null;
+        if(modifyDTO != null){
+            userDTO = mapper.map(modifyDTO, UserDTO.class);
+        }
+        return userDTO;
+
+    }
+
 }

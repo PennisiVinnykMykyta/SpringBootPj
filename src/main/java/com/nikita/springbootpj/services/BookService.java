@@ -3,28 +3,24 @@ package com.nikita.springbootpj.services;
 import com.nikita.springbootpj.dto.BookDTO;
 import com.nikita.springbootpj.dto.CarDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BookService {
 
-    BookDTO findBookById(int id);
+    BookDTO getBookById(int id);//
 
-    public void deleteAllUserBookings(int deleteID);
+    public void deleteAllUserBookings(int deleteID); //
 
-    List<BookDTO> findAllBooks();
+    public List<BookDTO> getAllBooks();
+    public void acceptBooking(int id); //
 
-    public void acceptBooking(int id);
+    List<CarDTO> bookedCars(LocalDate startDate, LocalDate endDate);
 
-    List<CarDTO> getConflictingBookings(String startDate, String endDate);
+    void deleteBookById(int id); //
 
-    void deleteById(int id);
+    void saveOrUpdateBook(BookDTO bookDTO); //
 
-    void saveOrUpdateBook(int userID, int carID, String bookID, String startDate, String endDate);
-
-    List<BookDTO> findAllUserBooks(int id);
-
-    String checkDates(String startDate, String endDate);
-
-    String errorCheck(String error);
+    List<BookDTO> getAllUserBooks(int id);
 
 }

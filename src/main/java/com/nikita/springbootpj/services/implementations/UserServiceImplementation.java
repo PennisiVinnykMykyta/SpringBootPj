@@ -4,23 +4,41 @@ import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.entities.User;
 import com.nikita.springbootpj.mappers.UserMapper;
 import com.nikita.springbootpj.repositories.UserRepository;
+import com.nikita.springbootpj.services.BookService;
 import com.nikita.springbootpj.services.UserService;
-import org.hibernate.sql.exec.ExecutionException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+@Service
+@RequiredArgsConstructor
 public class UserServiceImplementation implements UserService {
 
-    private UserRepository userRepository;
-    private UserMapper userMapper;
+
+    private final UserRepository userRepository;
+
+    private final BookService bookService;
+    private final UserMapper userMapper;
 
     public UserDTO getUserByCredentials(String email){
-        return userMapper.fromUserToDTO(userRepository.getUserByEmail(email));
+        UserDTO userDTO = null;
+        if(userRepository.existsByEmail(email)){
+            userDTO = userMapper.fromUserToDTO(userRepository.getUserByEmail(email));
+        }
+        return userDTO;
     }
 
     public UserDTO getUserById(int id){
-        return userMapper.fromUserToDTO(userRepository.findById(id).get());
+        UserDTO userDTO = null;
+        if(userRepository.findById(id).isPresent()){
+            userDTO = userMapper.fromUserToDTO(userRepository.findById(id).get());
+        }
+        return userDTO;
+
     }
 
     public List<UserDTO> getAllUsers(){
@@ -33,22 +51,21 @@ public class UserServiceImplementation implements UserService {
     }
 
     public void saveOrUpdateUser(UserDTO userDTO){
-        if(userDTO.getId() == null){ // if there is no id we save him
+        if(userDTO.getId() == null){
             userRepository.save(userMapper.fromDtoToUser(userDTO));
-        }else{ // else we need to take the updated version and save it
-            UserDTO modifyToModify = userMapper.fromUserToDTO(userRepository.findById(userDTO.getId()).get());
-            modifyToModify = userDTO;
-            userRepository.save(userMapper.fromDtoToUser(modifyToModify));
-            //
+
+        }else if(userRepository.findById(userDTO.getId()).isPresent()){
+                UserDTO userToModify = userMapper.fromDTOToModify(userDTO);
+                userRepository.save(userMapper.fromDtoToUser(userToModify));
         }
+
     }
 
     public void deleteUserById(int id){
         UserDTO userDTO = this.getUserById(id);
         if(userDTO != null){
+            bookService.deleteAllUserBookings(userDTO.getId());
             userRepository.deleteById(userDTO.getId());
-        }else{
-            throw new ExecutionException("Couldn't delete user with this id: " + id);
         }
     }
 

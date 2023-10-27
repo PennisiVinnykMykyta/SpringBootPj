@@ -15,7 +15,7 @@ public class BookMapper {
     private final UserMapper userMapper;
     private final CarMapper carMapper;
 
-    Book fromDtoToBook(BookDTO bookDTO){
+    public Book fromDtoToBook(BookDTO bookDTO){
         Book book = null;
         if(bookDTO != null){
             book = mapper.map(bookDTO,Book.class);
@@ -25,7 +25,7 @@ public class BookMapper {
         return book;
     }
 
-    BookDTO fromBookToDTO(Book book){
+    public BookDTO fromBookToDTO(Book book){
         BookDTO bookDTO = null;
         if(book != null){
             bookDTO = mapper.map(book,BookDTO.class);
@@ -33,6 +33,15 @@ public class BookMapper {
             bookDTO.setCar(carMapper.fromCarToDTO(book.getCar()));
         }
         return bookDTO;
+    }
+
+    public BookDTO fromDTOToModify(BookDTO modifyDTO){
+        BookDTO bookDTO = null;
+        if(modifyDTO != null){
+            bookDTO = mapper.map(modifyDTO, BookDTO.class);
+        }
+        return bookDTO;
+
     }
 
 

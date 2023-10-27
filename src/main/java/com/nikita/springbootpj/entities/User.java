@@ -6,6 +6,7 @@ import lombok.Data;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -34,9 +35,9 @@ public class User implements Serializable {
     private UserType type;
 
     @Column(name = "birth_date", nullable = false)
-    private Date birthDate;
+    private LocalDate birthDate;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Book> bookings;
 
 

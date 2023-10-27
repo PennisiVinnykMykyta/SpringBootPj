@@ -2,17 +2,18 @@ package com.nikita.springbootpj.services;
 
 import com.nikita.springbootpj.dto.CarDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CarService {
 
-    CarDTO findCarById(int id);
+    CarDTO getCarById(int id);
 
-    List<CarDTO> findAllCars();
+    List<CarDTO> getAllCars();
 
-    List<CarDTO> availableCars(List<Integer> BookedCars);
+    List<CarDTO> availableCars(LocalDate start, LocalDate finish);
 
-    void deleteById(int id);
+    void deleteCarById(int id);
 
-    void saveOrUpdateCar(String carID, String model, String brand, String color, String numberPlate);
+    void saveOrUpdateCar(CarDTO carDTO);
 }

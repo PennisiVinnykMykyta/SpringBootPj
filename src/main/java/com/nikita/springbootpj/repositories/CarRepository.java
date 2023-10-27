@@ -12,4 +12,6 @@ import java.util.List;
 public interface CarRepository extends JpaRepository<Car,Integer>, JpaSpecificationExecutor<Car> {
 
     List<Car> getCarsByBookingsIsNotContaining(Book book); //prende tutte i veicoli che non siano prenotati
+
+    boolean existsById(Integer id);
 }

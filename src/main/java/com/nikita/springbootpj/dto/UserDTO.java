@@ -1,10 +1,10 @@
 package com.nikita.springbootpj.dto;
 
-import com.nikita.springbootpj.entities.Book;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
+
 
 
 @Data
@@ -16,8 +16,6 @@ public class UserDTO {
     private String lastName;
     private String email;
     private String password;
-    private Date birthDate;
-
-    private List<Book> bookList;
+    private LocalDate birthDate;
 
 }
