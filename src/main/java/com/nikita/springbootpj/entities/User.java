@@ -37,7 +37,7 @@ public class User implements Serializable {
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Book> bookings;
 
 

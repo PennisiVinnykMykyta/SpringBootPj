@@ -18,8 +18,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("get-user/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable("id") int id){
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("userId") int id){
         UserDTO userDTO = userService.getUserById(id);
         if(userDTO != null){
             return  new ResponseEntity<>(userDTO, HttpStatus.OK);
@@ -28,7 +28,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("verify-user/{email}")
+    @GetMapping("/verify/{email}")
     public ResponseEntity<UserDTO> getUserByCredentials(@PathVariable("email") String email){
         UserDTO userDTO = userService.getUserByCredentials(email);
         if(userDTO != null){
@@ -37,8 +37,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @GetMapping("/user-list")
+    @GetMapping("/list")
     public ResponseEntity<UserDTO> getAllUsers(){
         List<UserDTO> usersList = userService.getAllUsers();
         if(usersList != null){
@@ -48,13 +47,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/add-or-update-user", method = {RequestMethod.PUT, RequestMethod.POST})
+    @RequestMapping(value = "/add-or-update", method = {RequestMethod.PUT, RequestMethod.POST})
     public void addOrUpdateUser(@RequestBody UserDTO userDTO) throws ParseException {
-        userService.saveOrUpdateUser(userDTO);
+       userService.saveOrUpdateUser(userDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable("id") int id){
+    @DeleteMapping("/delete/{userId}")
+    public void deleteUser(@PathVariable("userId") int id){
        userService.deleteUserById(id);
     }
 

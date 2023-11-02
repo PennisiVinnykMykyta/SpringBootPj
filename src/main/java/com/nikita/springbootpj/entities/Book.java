@@ -30,7 +30,6 @@ public class Book {
     @Column(name="end_date")
     private LocalDate endDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name="valid")
     private Boolean valid;
 }

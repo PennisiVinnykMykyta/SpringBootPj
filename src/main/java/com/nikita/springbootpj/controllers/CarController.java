@@ -18,8 +18,8 @@ public class CarController {
 
     private final CarService carService;
 
-    @GetMapping("getCar/{id}")
-    public ResponseEntity<CarDTO> getCar(@PathVariable("id") int id){
+    @GetMapping("/get/{carId}")
+    public ResponseEntity<CarDTO> getCar(@PathVariable("carId") int id){
         CarDTO carDTO = carService.getCarById(id);
         if(carDTO != null){
             return  new ResponseEntity<>(carDTO, HttpStatus.OK);
@@ -38,7 +38,7 @@ public class CarController {
         }
     }
 
-    @GetMapping("/car-list")
+    @GetMapping("/list")
     public ResponseEntity<CarDTO> getAllCars(){
         List<CarDTO> carsList = carService.getAllCars();
         if(carsList != null){
@@ -48,13 +48,13 @@ public class CarController {
         }
     }
 
-    @RequestMapping(value = "/add-or-update-car", method = {RequestMethod.PUT, RequestMethod.POST})
+    @RequestMapping(value = "/add-or-update", method = {RequestMethod.PUT, RequestMethod.POST})
     public void addOrUpdateCar(@RequestBody CarDTO carDTO) throws ParseException {
         carService.saveOrUpdateCar(carDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteCar(@PathVariable("id") int id){
+    @DeleteMapping("/delete/{carId}")
+    public void deleteCar(@PathVariable("carId") int id){
         carService.deleteCarById(id);
     }
 }

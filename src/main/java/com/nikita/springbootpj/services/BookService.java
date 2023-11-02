@@ -6,14 +6,14 @@ import com.nikita.springbootpj.dto.CarDTO;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface BookService {
+public interface BookService{
 
     BookDTO getBookById(int id);//
 
-    public void deleteAllUserBookings(int deleteID); //
+    void deleteAllUserBookings(int deleteID); //
 
-    public List<BookDTO> getAllBooks();
-    public void acceptBooking(int id); //
+    List<BookDTO> getAllBooks();
+    void acceptBooking(int id); //
 
     List<CarDTO> bookedCars(LocalDate startDate, LocalDate endDate);
 

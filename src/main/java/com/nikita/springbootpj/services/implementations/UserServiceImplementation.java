@@ -4,10 +4,10 @@ import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.entities.User;
 import com.nikita.springbootpj.mappers.UserMapper;
 import com.nikita.springbootpj.repositories.UserRepository;
-import com.nikita.springbootpj.services.BookService;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImplementation implements UserService {
 
 
     private final UserRepository userRepository;
 
-    private final BookService bookService;
     private final UserMapper userMapper;
 
     public UserDTO getUserByCredentials(String email){
@@ -64,8 +64,9 @@ public class UserServiceImplementation implements UserService {
     public void deleteUserById(int id){
         UserDTO userDTO = this.getUserById(id);
         if(userDTO != null){
-            bookService.deleteAllUserBookings(userDTO.getId());
             userRepository.deleteById(userDTO.getId());
+        }else{
+            System.out.println("No such user exists");
         }
     }
 

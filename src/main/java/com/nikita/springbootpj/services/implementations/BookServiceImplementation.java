@@ -8,9 +8,11 @@ import com.nikita.springbootpj.mappers.BookMapper;
 import com.nikita.springbootpj.mappers.CarMapper;
 import com.nikita.springbootpj.mappers.UserMapper;
 import com.nikita.springbootpj.repositories.BookRepository;
+import com.nikita.springbootpj.services.BookService;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,16 +20,22 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceImplementation {
+@Transactional
+public class BookServiceImplementation implements BookService {
 
     private final BookRepository bookRepository;
     private final UserService userService;
     private final UserMapper userMapper;
     private final CarMapper carMapper;
-    private  final BookMapper bookMapper;
+    private final BookMapper bookMapper;
 
     public List<CarDTO> bookedCars(LocalDate start, LocalDate finish){
-        List<Book> conflictingBooks = bookRepository.getBooksByStartDateBetweenOrEndDateBetween(start,finish);
+        List<Book> startIsBetween = bookRepository.getBooksByStartDateBetween(start,finish);
+        List<Book> finishIsBetween = bookRepository.getBooksByEndDateBetween(start,finish);
+        List<Book> conflictingBooks = new ArrayList<>();
+        conflictingBooks.addAll(startIsBetween);
+        conflictingBooks.addAll(finishIsBetween);
+
         List<CarDTO> bookedCars = new ArrayList<>();
         for(Book book : conflictingBooks){
             bookedCars.add(carMapper.fromCarToDTO(book.getCar()));
@@ -44,10 +52,15 @@ public class BookServiceImplementation {
 
     }
 
-    public void acceptBooking(Integer id){
+    public void acceptBooking(int id){
         if(bookRepository.findById(id).isPresent()){
             Book book = bookRepository.findById(id).get();
-            book.setValid(!book.getValid());
+            if(book.getValid() != null){
+                book.setValid(!book.getValid());
+                bookRepository.save(book);
+            }else{
+                System.out.println("Couldn't change books validity status");
+            }
         }
     }
 
@@ -55,6 +68,8 @@ public class BookServiceImplementation {
         BookDTO bookDTO = this.getBookById(id);
         if(bookDTO != null){
             bookRepository.deleteById(bookDTO.getId());
+        }else{
+            System.out.println("Couldn't Delete book: " + id);
         }
     }
 

@@ -29,7 +29,7 @@ public class Car implements Serializable {
     @Column(name = "brand", nullable = false)
     private String brand;
 
-    @OneToMany(mappedBy = "car", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "car", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Book> bookings;
 
 }

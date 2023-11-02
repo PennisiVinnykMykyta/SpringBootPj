@@ -10,5 +10,8 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    List<Book> getBooksByStartDateBetweenOrEndDateBetween(LocalDate start, LocalDate end);
+    List<Book> getBooksByStartDateBetween(LocalDate start, LocalDate end);
+    List<Book> getBooksByEndDateBetween(LocalDate start, LocalDate end);
 }
+
+//OrEndDateBetween
