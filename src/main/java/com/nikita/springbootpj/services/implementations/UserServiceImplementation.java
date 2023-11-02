@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Service
@@ -54,9 +54,14 @@ public class UserServiceImplementation implements UserService {
         if(userDTO.getId() == null){
             userRepository.save(userMapper.fromDtoToUser(userDTO));
 
-        }else if(userRepository.findById(userDTO.getId()).isPresent()){
-                UserDTO userToModify = userMapper.fromDTOToModify(userDTO);
-                userRepository.save(userMapper.fromDtoToUser(userToModify));
+        }else{
+            Optional<User> optionalUser = userRepository.findById(userDTO.getId());
+            if(optionalUser.isPresent()){
+                User user = optionalUser.get();
+                userMapper.updateUser(user,userDTO);
+                System.out.println(user);
+                userRepository.save(user);
+            }
         }
 
     }

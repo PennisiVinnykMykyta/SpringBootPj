@@ -3,6 +3,7 @@ package com.nikita.springbootpj.controllers;
 import com.nikita.springbootpj.dto.CarDTO;
 import com.nikita.springbootpj.services.CarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,12 @@ public class CarController {
         }
     }
 
-    @GetMapping("/available-cars")
-    public ResponseEntity<CarDTO> availableCars(@RequestBody LocalDate start, LocalDate finish){
+    @GetMapping("/available-cars/{start},{finish}")
+    public ResponseEntity<CarDTO> availableCars(
+            @PathVariable("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @PathVariable("finish") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finish
+            )
+    {
         List<CarDTO> carsList = carService.availableCars(start,finish);
         if(carsList != null){
             return new ResponseEntity(carsList,HttpStatus.OK);

@@ -28,13 +28,9 @@ public class UserMapper {
         return userDTO;
     }
 
-    public UserDTO fromDTOToModify(UserDTO modifyDTO){
-        UserDTO userDTO = null;
-        if(modifyDTO != null){
-            userDTO = mapper.map(modifyDTO, UserDTO.class);
+    public void updateUser(User user, UserDTO userDTO) {
+        if(user != null && userDTO != null){
+            mapper.map(userDTO, user);
         }
-        return userDTO;
-
     }
-
 }

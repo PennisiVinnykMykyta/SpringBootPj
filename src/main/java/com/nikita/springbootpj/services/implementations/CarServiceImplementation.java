@@ -42,22 +42,20 @@ public class CarServiceImplementation implements CarService {
     }
 
     public List<CarDTO> availableCars(LocalDate start, LocalDate finish){
+        List<CarDTO> carList = new ArrayList<>();
 
-        if(!start.isAfter(LocalDate.now().plusDays(2)) || start.isAfter(finish)){
-            return null;
+        if (start.isAfter(LocalDate.now().plusDays(2)) && !start.isAfter(finish)) {
+            carList = this.getAllCars();
+            List<CarDTO> bookedCars = bookService.bookedCars(start, finish);
 
-        }else{
-            List<CarDTO> carList = this.getAllCars();
-            List<CarDTO> bookedCars = bookService.bookedCars(start,finish);
-
-            if(bookedCars != null){
-                for(CarDTO car : bookedCars){
+            if (bookedCars != null) {
+                for (CarDTO car : bookedCars) {
                     carList.remove(car);
                 }
             }
             //se la lista delle macchine prenotate e' vuota allora ritrona tutte le macchine
-            return carList;
         }
+        return carList;
 
     }
 

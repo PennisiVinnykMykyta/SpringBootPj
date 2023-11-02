@@ -102,8 +102,13 @@ public class BookServiceImplementation implements BookService {
     public List<BookDTO> getAllUserBooks(int id){
         User user = userMapper.fromDtoToUser(userService.getUserById(id));
         List<BookDTO> userBooks = new ArrayList<>();
-        for(Book book : user.getBookings()){
-            userBooks.add(bookMapper.fromBookToDTO(book));
+        if(user.getBookings() != null){
+            System.out.println("books not empty");
+            for(Book book : user.getBookings()){
+                userBooks.add(bookMapper.fromBookToDTO(book));
+            }
+        }else {
+            userBooks = null;
         }
         return userBooks;
     }

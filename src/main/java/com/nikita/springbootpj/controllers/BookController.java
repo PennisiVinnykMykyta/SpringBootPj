@@ -39,11 +39,7 @@ public class BookController {
     @GetMapping("/list/by-user/{userId}")
     public ResponseEntity<BookDTO> getAllUserBooks(@PathVariable("userId") int id){
         List<BookDTO> booksList = bookService.getAllUserBooks(id);
-        if(booksList != null){
-            return new ResponseEntity(booksList,HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity(booksList,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/add-or-update", method = {RequestMethod.PUT, RequestMethod.POST})

@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -39,7 +38,6 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Book> bookings;
-
 
 }
 
