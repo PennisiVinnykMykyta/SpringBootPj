@@ -35,16 +35,9 @@ public class BookMapper {
         return bookDTO;
     }
 
-    public BookDTO fromDTOToModify(BookDTO modifyDTO){
-        BookDTO bookDTO = null;
-        if(modifyDTO != null){
-            bookDTO = mapper.map(modifyDTO, BookDTO.class);
+    public void updateBook(Book book,BookDTO bookDTO) {
+        if(book != null && bookDTO != null){
+            mapper.map(bookDTO,book);
         }
-        return bookDTO;
-
     }
-
-
-
-
 }

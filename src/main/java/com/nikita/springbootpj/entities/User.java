@@ -1,9 +1,11 @@
 package com.nikita.springbootpj.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nikita.springbootpj.entities.enums.UserType;
 import lombok.Data;
 
 import jakarta.persistence.*;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDate;

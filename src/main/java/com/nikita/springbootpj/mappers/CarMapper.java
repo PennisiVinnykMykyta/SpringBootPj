@@ -28,13 +28,11 @@ public class CarMapper {
         return carDTO;
     }
 
-    public CarDTO fromDTOToModify(CarDTO modifyDTO){
-        CarDTO carDTO = null;
-        if(modifyDTO != null){
-            carDTO = mapper.map(modifyDTO, CarDTO.class);
-        }
-        return carDTO;
 
+    public void updateCar(Car car, CarDTO carDTO){
+        if(car != null && carDTO != null){
+            mapper.map(carDTO,car);
+        }
     }
 
 }

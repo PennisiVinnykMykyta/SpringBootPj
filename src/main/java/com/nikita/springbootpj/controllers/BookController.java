@@ -43,17 +43,17 @@ public class BookController {
     }
 
     @RequestMapping(value = "/add-or-update", method = {RequestMethod.PUT, RequestMethod.POST})
-    public void addOrUpdateCar(@RequestBody BookDTO bookDTO) throws ParseException {
+    public void addOrUpdateBook(@RequestBody BookDTO bookDTO) throws ParseException {
         bookService.saveOrUpdateBook(bookDTO);
     }
 
     @DeleteMapping("/delete/{bookId}")
-    public void deleteCar(@PathVariable("bookId") int id){
+    public void deleteBook(@PathVariable("bookId") int id){
         bookService.deleteBookById(id);
     }
 
-    @RequestMapping(value = "/accept-or-decline/{bookId}", method = {RequestMethod.PUT, RequestMethod.POST})
-    public void acceptOrDeclineBook(@PathVariable("bookId") int id){
+    @RequestMapping(value = "/accept-or-decline", method = {RequestMethod.PUT, RequestMethod.POST})
+    public void acceptOrDeclineBook(@RequestBody Integer id){
         bookService.acceptBooking(id);
     }
 }

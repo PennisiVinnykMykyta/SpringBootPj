@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,9 +71,13 @@ public class CarServiceImplementation implements CarService {
     public void saveOrUpdateCar(CarDTO carDTO){
         if(carDTO.getId() == null){ // if there is no id we save him
             carRepository.save(carMapper.fromDtoToCar(carDTO));
-        }else if(carRepository.findById(carDTO.getId()).isPresent()){ // else we need to take the updated version and save it
-            CarDTO carToModify = carMapper.fromDTOToModify(carDTO);
-            carRepository.save(carMapper.fromDtoToCar(carToModify));
+        }else{
+            Optional<Car> optionalCar = carRepository.findById(carDTO.getId());
+            if(optionalCar.isPresent()){
+                Car car = optionalCar.get();
+                carMapper.updateCar(car,carDTO);
+                carRepository.save(car);
+            }
         }
     }
 }

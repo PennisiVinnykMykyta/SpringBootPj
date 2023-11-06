@@ -1,8 +1,11 @@
 package com.nikita.springbootpj.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import jakarta.persistence.*;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,7 +13,6 @@ import java.util.List;
 @Entity
 @Table(name ="car")
 @Data
-
 public class Car implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

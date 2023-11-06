@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -83,32 +84,28 @@ public class BookServiceImplementation implements BookService {
     }
 
     public void saveOrUpdateBook(BookDTO bookDTO){
+
         if(bookDTO.getId() == null){
             bookRepository.save(bookMapper.fromDtoToBook(bookDTO));
-
-        }else if(bookRepository.findById(bookDTO.getId()).isPresent()){
-            BookDTO bookToModify = bookMapper.fromDTOToModify(bookDTO);
-            bookRepository.save(bookMapper.fromDtoToBook(bookToModify));
-        }
-    }
-
-    public void deleteAllUserBookings(int deleteID){ //da richiamare quando eliminiamo il user!
-        User user = userMapper.fromDtoToUser(userService.getUserById(deleteID));
-        for(Book book : user.getBookings()){
-            bookRepository.deleteById(book.getId());
+        }else{
+            Optional<Book> optionalBook = bookRepository.findById(bookDTO.getId());
+            if(optionalBook.isPresent()){
+                Book book = optionalBook.get();
+                bookMapper.updateBook(book,bookDTO);
+                bookRepository.save(book);
+            }
         }
     }
 
     public List<BookDTO> getAllUserBooks(int id){
         User user = userMapper.fromDtoToUser(userService.getUserById(id));
         List<BookDTO> userBooks = new ArrayList<>();
-        if(user.getBookings() != null){
+
+        if(bookRepository.getBooksByUser(user) != null){
             System.out.println("books not empty");
-            for(Book book : user.getBookings()){
+            for(Book book : bookRepository.getBooksByUser(user)){
                 userBooks.add(bookMapper.fromBookToDTO(book));
             }
-        }else {
-            userBooks = null;
         }
         return userBooks;
     }

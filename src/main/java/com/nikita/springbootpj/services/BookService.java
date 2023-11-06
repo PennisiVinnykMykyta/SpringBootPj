@@ -10,8 +10,6 @@ public interface BookService{
 
     BookDTO getBookById(int id);//
 
-    void deleteAllUserBookings(int deleteID); //
-
     List<BookDTO> getAllBooks();
     void acceptBooking(int id); //
 

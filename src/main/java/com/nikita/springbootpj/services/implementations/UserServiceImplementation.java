@@ -1,6 +1,7 @@
 package com.nikita.springbootpj.services.implementations;
 
 import com.nikita.springbootpj.dto.UserDTO;
+import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.User;
 import com.nikita.springbootpj.mappers.UserMapper;
 import com.nikita.springbootpj.repositories.UserRepository;
@@ -40,6 +41,7 @@ public class UserServiceImplementation implements UserService {
         return userDTO;
 
     }
+
 
     public List<UserDTO> getAllUsers(){
         List<User> userList = userRepository.findAll();
