@@ -1,6 +1,7 @@
 package com.nikita.springbootpj.services.implementations;
 
 import com.nikita.springbootpj.dto.BookDTO;
+import com.nikita.springbootpj.dto.BookRequestDTO;
 import com.nikita.springbootpj.dto.CarDTO;
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.Car;
@@ -50,11 +51,8 @@ public class BookServiceImplementation implements BookService {
     }
 
     public BookDTO getBookById(int id){ //tested
-        BookDTO bookDTO = null;
-        if(bookRepository.findById(id).isPresent()){
-            bookDTO = bookMapper.fromBookToDTO(bookRepository.findById(id).get());
-        }
-        return bookDTO;
+
+        return bookMapper.fromBookToDTO(bookRepository.findById(id).orElseThrow(()->new RuntimeException("not valid id")));
 
     }
 
@@ -88,19 +86,19 @@ public class BookServiceImplementation implements BookService {
         return books;
     }
 //passo id da angular poi trovo le entità con quel id e li setto al mio book
-    public void saveOrUpdateBook(BookDTO bookDTO){
+    public void saveOrUpdateBook(BookRequestDTO bookRequestDto){
+        User user = userRepository.findById(bookRequestDto.getUserId()).orElseThrow(() -> new RuntimeException("User Not found"));
+        Car car = carRepository.findById(bookRequestDto.getCarId()).orElseThrow(() -> new RuntimeException("Car not found"));
 
-        if(bookDTO.getId() == null){
-            bookRepository.save(bookMapper.fromDtoToBook(bookDTO));
+        if(bookRequestDto.getBookId() == null){
+            bookRepository.save(bookMapper.fromRequestDtoToBook(user,car,bookRequestDto));
         }else{
-            Optional<Book> optionalBook = bookRepository.findById(bookDTO.getId());
+            Optional<Book> optionalBook = bookRepository.findById(bookRequestDto.getBookId());
             if(optionalBook.isPresent()){
                 Book book = optionalBook.get(); //prendiamo l'entità associata
                 System.out.println(book);
 
-                Car car = carRepository.findById(bookDTO.getCar().getId()).orElseThrow(() -> new RuntimeException("Car not found"));
-
-                bookMapper.updateBook(book,bookDTO,car);
+                bookMapper.updateBook(book,bookRequestDto,car);
                 bookRepository.save(book);
             }
         }

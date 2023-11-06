@@ -2,8 +2,10 @@ package com.nikita.springbootpj.mappers;
 
 
 import com.nikita.springbootpj.dto.BookDTO;
+import com.nikita.springbootpj.dto.BookRequestDTO;
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.Car;
+import com.nikita.springbootpj.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -16,12 +18,13 @@ public class BookMapper {
     private final UserMapper userMapper;
     private final CarMapper carMapper;
 
-    public Book fromDtoToBook(BookDTO bookDTO){
+    public Book fromRequestDtoToBook(User user, Car car, BookRequestDTO bookRequestDTO){
         Book book = null;
-        if(bookDTO != null){
-            book = mapper.map(bookDTO,Book.class);
-            book.setUser(userMapper.fromDtoToUser(bookDTO.getUser()));
-            book.setCar(carMapper.fromDtoToCar(bookDTO.getCar()));
+        if(bookRequestDTO != null){
+            book = mapper.map(bookRequestDTO,Book.class);
+            book.setUser(user);
+            book.setCar(car);
+            book.setValid(false);
         }
         return book;
     }
@@ -36,10 +39,10 @@ public class BookMapper {
         return bookDTO;
     }
 
-    public void updateBook(Book book,BookDTO bookDTO,Car car) {
-       if(book != null && bookDTO != null){
-            book.setStartDate(bookDTO.getStartDate());
-            book.setEndDate(bookDTO.getEndDate());
+    public void updateBook(Book book,BookRequestDTO bookRequestDTO,Car car) {
+       if(book != null && bookRequestDTO != null){
+            book.setStartDate(bookRequestDTO.getStartDate());
+            book.setEndDate(bookRequestDTO.getEndDate());
             book.setCar(car);
             book.setValid(false);
         }

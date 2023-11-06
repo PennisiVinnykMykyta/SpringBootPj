@@ -1,6 +1,7 @@
 package com.nikita.springbootpj.controllers;
 
 import com.nikita.springbootpj.dto.BookDTO;
+import com.nikita.springbootpj.dto.BookRequestDTO;
 import com.nikita.springbootpj.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,8 +44,8 @@ public class BookController {
     }
 
     @RequestMapping(value = "/add-or-update", method = {RequestMethod.PUT, RequestMethod.POST})
-    public void addOrUpdateBook(@RequestBody BookDTO bookDTO) throws ParseException {
-        bookService.saveOrUpdateBook(bookDTO);
+    public void addOrUpdateBook(@RequestBody BookRequestDTO bookRequestDTO){
+        bookService.saveOrUpdateBook(bookRequestDTO);
     }
 
     @DeleteMapping("/delete/{bookId}")
