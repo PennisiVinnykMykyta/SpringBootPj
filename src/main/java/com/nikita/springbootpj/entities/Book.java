@@ -14,7 +14,8 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "book")
-@Data
+@Getter
+@Setter
 public class Book implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -23,12 +24,10 @@ public class Book implements Serializable{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id")
-    @ToString.Exclude
     private Car car;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

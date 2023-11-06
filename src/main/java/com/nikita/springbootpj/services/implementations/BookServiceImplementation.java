@@ -3,11 +3,14 @@ package com.nikita.springbootpj.services.implementations;
 import com.nikita.springbootpj.dto.BookDTO;
 import com.nikita.springbootpj.dto.CarDTO;
 import com.nikita.springbootpj.entities.Book;
+import com.nikita.springbootpj.entities.Car;
 import com.nikita.springbootpj.entities.User;
 import com.nikita.springbootpj.mappers.BookMapper;
 import com.nikita.springbootpj.mappers.CarMapper;
 import com.nikita.springbootpj.mappers.UserMapper;
 import com.nikita.springbootpj.repositories.BookRepository;
+import com.nikita.springbootpj.repositories.CarRepository;
+import com.nikita.springbootpj.repositories.UserRepository;
 import com.nikita.springbootpj.services.BookService;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,8 @@ public class BookServiceImplementation implements BookService {
     private final UserMapper userMapper;
     private final CarMapper carMapper;
     private final BookMapper bookMapper;
+    private final CarRepository carRepository;
+    private final UserRepository userRepository;
 
     public List<CarDTO> bookedCars(LocalDate start, LocalDate finish){
         List<Book> startIsBetween = bookRepository.getBooksByStartDateBetween(start,finish);
@@ -82,7 +87,7 @@ public class BookServiceImplementation implements BookService {
         }
         return books;
     }
-
+//passo id da angular poi trovo le entità con quel id e li setto al mio book
     public void saveOrUpdateBook(BookDTO bookDTO){
 
         if(bookDTO.getId() == null){
@@ -90,9 +95,21 @@ public class BookServiceImplementation implements BookService {
         }else{
             Optional<Book> optionalBook = bookRepository.findById(bookDTO.getId());
             if(optionalBook.isPresent()){
+                BookDTO book = getBookById(bookDTO.getId()); //prendiamo l'entità associata
+                System.out.println("Associated Book before the change");
+                System.out.println(book);
+                if(book != null){
+                    book = bookMapper.updateBook(bookDTO); //aggiorniamo i dati del dto associato
+                    System.out.println("Associated Book after the change");
+                    System.out.println(book);
+                    bookRepository.save(bookMapper.fromDtoToBook(book)); //salviamo l'entità dopo che la mappiamo dal dto
+                }
+                /*Car car = carRepository.findById(bookDTO.getCar().getId()).orElseThrow(() -> new RuntimeException("Car not found"));
+                System.out.println("Car: "+car);
                 Book book = optionalBook.get();
-                bookMapper.updateBook(book,bookDTO);
-                bookRepository.save(book);
+                System.out.println("PresentCar: "+book.getCar());
+                bookMapper.updateBook(book,bookDTO,car);
+                bookRepository.save(book);*/
             }
         }
     }
