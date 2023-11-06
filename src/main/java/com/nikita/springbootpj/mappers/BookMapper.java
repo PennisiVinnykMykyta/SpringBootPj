@@ -36,17 +36,13 @@ public class BookMapper {
         return bookDTO;
     }
 
-    public BookDTO updateBook(BookDTO bookDTO) {
-       /* if(book != null && bookDTO != null){
-            mapper.map(bookDTO,book);
+    public void updateBook(Book book,BookDTO bookDTO,Car car) {
+       if(book != null && bookDTO != null){
+            book.setStartDate(bookDTO.getStartDate());
+            book.setEndDate(bookDTO.getEndDate());
             book.setCar(car);
-        }*/
-        BookDTO book = null;
-        if(bookDTO != null){
-            book = mapper.map(bookDTO,BookDTO.class);
-            book.setCar(bookDTO.getCar());
-            book.setUser(bookDTO.getUser());
+            book.setValid(false);
         }
-        return book;
+
     }
 }

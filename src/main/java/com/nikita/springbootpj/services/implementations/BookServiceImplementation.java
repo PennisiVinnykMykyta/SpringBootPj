@@ -95,21 +95,13 @@ public class BookServiceImplementation implements BookService {
         }else{
             Optional<Book> optionalBook = bookRepository.findById(bookDTO.getId());
             if(optionalBook.isPresent()){
-                BookDTO book = getBookById(bookDTO.getId()); //prendiamo l'entità associata
-                System.out.println("Associated Book before the change");
+                Book book = optionalBook.get(); //prendiamo l'entità associata
                 System.out.println(book);
-                if(book != null){
-                    book = bookMapper.updateBook(bookDTO); //aggiorniamo i dati del dto associato
-                    System.out.println("Associated Book after the change");
-                    System.out.println(book);
-                    bookRepository.save(bookMapper.fromDtoToBook(book)); //salviamo l'entità dopo che la mappiamo dal dto
-                }
-                /*Car car = carRepository.findById(bookDTO.getCar().getId()).orElseThrow(() -> new RuntimeException("Car not found"));
-                System.out.println("Car: "+car);
-                Book book = optionalBook.get();
-                System.out.println("PresentCar: "+book.getCar());
+
+                Car car = carRepository.findById(bookDTO.getCar().getId()).orElseThrow(() -> new RuntimeException("Car not found"));
+
                 bookMapper.updateBook(book,bookDTO,car);
-                bookRepository.save(book);*/
+                bookRepository.save(book);
             }
         }
     }
