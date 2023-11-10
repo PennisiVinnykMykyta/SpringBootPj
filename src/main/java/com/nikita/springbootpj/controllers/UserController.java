@@ -28,13 +28,16 @@ public class UserController {
         }
     }
 
-    @GetMapping("/verify/{email}")
-    public ResponseEntity<UserDTO> getUserByCredentials(@PathVariable("email") String email){
-        UserDTO userDTO = userService.getUserByCredentials(email);
+    @GetMapping("/verify/{email},{password}")
+    public ResponseEntity<UserDTO> getUserByCredentials(
+            @PathVariable("email") String email,
+            @PathVariable("password") String password)
+    {
+        UserDTO userDTO = userService.getUserByCredentials(email,password);
         if(userDTO != null){
             return  new ResponseEntity<>(userDTO, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
     }
     @GetMapping("/list")

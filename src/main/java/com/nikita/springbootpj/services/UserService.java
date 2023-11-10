@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
 
     UserDTO getUserById(int id);
-    UserDTO getUserByCredentials(String email);
+    UserDTO getUserByCredentials(String email,String password);
     List<UserDTO> getAllUsers();
     void deleteUserById(int deleteID);
 

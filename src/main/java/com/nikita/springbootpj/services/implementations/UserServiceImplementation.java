@@ -25,9 +25,9 @@ public class UserServiceImplementation implements UserService {
 
     private final UserMapper userMapper;
 
-    public UserDTO getUserByCredentials(String email){
+    public UserDTO getUserByCredentials(String email,String password){
         UserDTO userDTO = null;
-        if(userRepository.existsByEmail(email)){
+        if(userRepository.existsByEmailAndPassword(email,password)){
             userDTO = userMapper.fromUserToDTO(userRepository.getUserByEmail(email));
         }
         return userDTO;
