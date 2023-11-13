@@ -11,5 +11,7 @@ public interface UserService {
     List<UserDTO> getAllUsers();
     void deleteUserById(int deleteID);
 
+    UserDTO getUserByEmail(String email);
+
     void saveOrUpdateUser(UserDTO userDTO) throws ParseException;
 }

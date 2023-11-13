@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -14,25 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static org.springframework.security.config.Elements.JWT;
-
 @Component
 public class JwtProvider {
 
     public static final long JWT_TOKEN_VALIDITY = 60*60*5;
-    public static String secretKey;
-    public static String jwtPrefix;
-    public static String headerParam;
-
-    public JwtProvider(Environment environment){
-        secretKey = environment.getProperty("security.secret");
-        jwtPrefix = environment.getProperty("security.prefix");
-        headerParam = environment.getProperty("security.param");
-
-        if(secretKey == null || jwtPrefix == null || headerParam == null){
-            throw new BeanInitializationException("Couldn't assign proprieties");
-        }
-    }
+    @Value("${security.secret-key}")
+    private  String secretKey;
 
     private Claims getAllClaimsFromToken(String token){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();

@@ -1,28 +1,25 @@
 package com.nikita.springbootpj.config.security;
 
+import com.nikita.springbootpj.services.implementations.UserInfoService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
-@RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
-    private final UserDetailsService userDetailsService;
+
+    private UserInfoService userDetailsService;
     private JwtProvider jwtProvider;
     private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
 
@@ -30,13 +27,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected  void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws SecurityException, IOException, ServletException {
 
-        String requestHeader = request.getHeader("Authorization");
+        String requestHeader = request.getHeader("Authorization"); //my header param
         logger.info("Header: {}",requestHeader);
 
         String username = null;
         String token = null;
 
-        if(requestHeader != null && requestHeader.startsWith("Bearer")){
+        if(requestHeader != null && requestHeader.startsWith("Bearer")){ //my prefix
             token = requestHeader.substring(7); //get token after the word bearer
 
             try{
@@ -77,3 +74,5 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
 
 }
+
+

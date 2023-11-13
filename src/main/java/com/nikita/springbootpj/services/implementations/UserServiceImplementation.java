@@ -42,6 +42,13 @@ public class UserServiceImplementation implements UserService {
 
     }
 
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        if(email != null ){
+            return userMapper.fromUserToDTO(userRepository.getUserByEmail(email));
+        }
+        return null;
+    }
 
     public List<UserDTO> getAllUsers(){
         List<User> userList = userRepository.findAll();
