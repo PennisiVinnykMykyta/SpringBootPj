@@ -1,18 +1,21 @@
 package com.nikita.springbootpj.services.implementations;
 
+import com.nikita.springbootpj.config.security.JwtProvider;
 import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.User;
+import com.nikita.springbootpj.entities.enums.UserType;
 import com.nikita.springbootpj.mappers.UserMapper;
 import com.nikita.springbootpj.repositories.UserRepository;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -82,6 +85,29 @@ public class UserServiceImplementation implements UserService {
         }else{
             System.out.println("No such user exists");
         }
+    }
+
+    private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+
+    public Map<String, Object> authenticate(String email, String password){
+        User user = this.userRepository.getUserByEmail(email);
+
+        if(!this.passwordEncoder.matches(password,user.getPassword())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Not valid credentials");
+        }
+
+        Map<String,Object> claimMap= new HashMap<>(0);
+        if(user.getType() == UserType.ADMIN){
+            claimMap.put("userType","ADMIN");
+        }else{
+            claimMap.put("userType","CUSTOMER");
+        }
+
+        String jwt = jwtProvider.generateToken(claimMap,email);
+        claimMap.put("token",jwt);
+        return claimMap;
+
     }
 
 

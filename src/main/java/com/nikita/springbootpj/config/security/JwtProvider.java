@@ -26,7 +26,7 @@ public class JwtProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
-    private String generateToken(Map<String, Object> claims, String subject){
+    public String generateToken(Map<String, Object> claims, String subject){
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512,secretKey)
@@ -49,11 +49,6 @@ public class JwtProvider {
 
     public String getUsernameFromToken(String token){
         return getClaimFromToken(token, Claims::getSubject);
-    }
-
-    public String createNewToken(UserDetails userDetails){
-        Map<String, Object> claims = new HashMap<>();
-        return generateToken(claims,userDetails.getUsername());
     }
 
     public boolean validateToken(String token, UserDetails userDetails){

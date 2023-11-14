@@ -2,6 +2,7 @@ package com.nikita.springbootpj.controllers;
 
 
 import com.nikita.springbootpj.dto.UserDTO;
+import com.nikita.springbootpj.dto.UserDetailsDTO;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,6 +28,11 @@ public class UserController {
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/auth")
+    public Map<String,Object> authentication(@RequestBody UserDTO userDTO){//UserDetailsDTO userDetailsDTO e poi lo implemento in angualr
+        return this.userService.authenticate(userDTO.getEmail(),userDTO.getPassword());
     }
 
     @GetMapping("/verify/{email},{password}")
