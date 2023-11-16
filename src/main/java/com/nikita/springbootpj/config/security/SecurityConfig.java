@@ -35,7 +35,7 @@ public class SecurityConfig{
     };
 
     public static final String[] USER_URL_MATCHER = {
-            "/api/user/add-or-update", //si devono criptare gli ID
+            "/api/user/add-or-update",
 
             "/api/booking/add-or-update",
             "/api/booking/delete/{bookId}",
@@ -47,18 +47,18 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
         return http
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //ALWAYS da usare fuori dai test
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(ADMIN_URL_MATCHER).hasAuthority("ADMIN")
                         .requestMatchers(USER_URL_MATCHER).hasAuthority("USER")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider())
                 .build();
     }
 
-    @Bean
+    @Bean //for testing
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web.ignoring().anyRequest();
     }

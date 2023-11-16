@@ -1,7 +1,9 @@
 package com.nikita.springbootpj.services.implementations;
 
 import com.nikita.springbootpj.config.security.JwtProvider;
+import com.nikita.springbootpj.dto.UserAuthDTO;
 import com.nikita.springbootpj.dto.UserDTO;
+import com.nikita.springbootpj.dto.UserDetailsDTO;
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.User;
 import com.nikita.springbootpj.entities.enums.UserType;
@@ -27,6 +29,22 @@ public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
 
     private final UserMapper userMapper;
+
+    public UserDetailsDTO getUserDetailsByCredentials(String email, String password){
+        UserDTO userDTO = this.getUserByCredentials(email,password);
+
+        if(userDTO != null){
+            UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+            userDetailsDTO.setEmail(userDTO.getEmail());
+            userDetailsDTO.setPassword(userDetailsDTO.getPassword());
+
+            UserAuthDTO token = this.authenticate(email, password);
+
+            return userDetailsDTO;
+        }
+
+        return null;
+    }
 
     public UserDTO getUserByCredentials(String email,String password){
         UserDTO userDTO = null;
@@ -90,23 +108,29 @@ public class UserServiceImplementation implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
-    public Map<String, Object> authenticate(String email, String password){
+    public UserAuthDTO authenticate(String email, String password){
         User user = this.userRepository.getUserByEmail(email);
 
-        if(!this.passwordEncoder.matches(password,user.getPassword())){
+        if(!password.equals(user.getPassword())){ //this.passwordEncoder.matches(password,user.getPassword())
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Not valid credentials");
         }
 
+        UserAuthDTO userAuthDTO = new UserAuthDTO();
         Map<String,Object> claimMap= new HashMap<>(0);
         if(user.getType() == UserType.ADMIN){
             claimMap.put("userType","ADMIN");
+            userAuthDTO.setUserType("ADMIN");
         }else{
             claimMap.put("userType","CUSTOMER");
+            userAuthDTO.setUserType("CUSTOMER");
         }
 
         String jwt = jwtProvider.generateToken(claimMap,email);
         claimMap.put("token",jwt);
-        return claimMap;
+
+        userAuthDTO.setToken(jwt);
+        System.out.println(userAuthDTO);
+        return userAuthDTO;
 
     }
 

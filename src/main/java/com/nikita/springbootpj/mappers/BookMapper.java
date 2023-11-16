@@ -18,9 +18,12 @@ public class BookMapper {
     private final UserMapper userMapper;
     private final CarMapper carMapper;
 
+
+
     public Book fromRequestDtoToBook(User user, Car car, BookRequestDTO bookRequestDTO){
         Book book = null;
         if(bookRequestDTO != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             book = mapper.map(bookRequestDTO,Book.class);
             book.setUser(user);
             book.setCar(car);
@@ -32,6 +35,7 @@ public class BookMapper {
     public BookDTO fromBookToDTO(Book book){
         BookDTO bookDTO = null;
         if(book != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             bookDTO = mapper.map(book,BookDTO.class);
             bookDTO.setUser(userMapper.fromUserToDTO(book.getUser()));
             bookDTO.setCar(carMapper.fromCarToDTO(book.getCar()));

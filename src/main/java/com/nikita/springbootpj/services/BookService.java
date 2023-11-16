@@ -20,6 +20,6 @@ public interface BookService{
 
     void saveOrUpdateBook(BookRequestDTO bookRequestDTO); //
 
-    List<BookDTO> getAllUserBooks(int id);
+    List<BookDTO> getAllUserBooks(String id);
 
 }

@@ -1,6 +1,7 @@
 package com.nikita.springbootpj.controllers;
 
 
+import com.nikita.springbootpj.dto.UserAuthDTO;
 import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.dto.UserDetailsDTO;
 import com.nikita.springbootpj.services.UserService;
@@ -20,9 +21,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/get/{userId}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable("userId") int id){
-        UserDTO userDTO = userService.getUserById(id);
+    @GetMapping("/get/{email}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("email") String email){
+        UserDTO userDTO = userService.getUserByEmail(email);
         if(userDTO != null){
             return  new ResponseEntity<>(userDTO, HttpStatus.OK);
         }else{
@@ -31,16 +32,16 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public Map<String,Object> authentication(@RequestBody UserDTO userDTO){//UserDetailsDTO userDetailsDTO e poi lo implemento in angualr
-        return this.userService.authenticate(userDTO.getEmail(),userDTO.getPassword());
+    public UserAuthDTO authentication(@RequestBody UserDetailsDTO userDetailsDTO){
+        return this.userService.authenticate(userDetailsDTO.getEmail(),userDetailsDTO.getPassword());
     }
 
-    @GetMapping("/verify/{email},{password}")
-    public ResponseEntity<UserDTO> getUserByCredentials(
+    @PostMapping("/verify/{email},{password}")
+    public ResponseEntity<UserDetailsDTO> getUserByCredentials(
             @PathVariable("email") String email,
             @PathVariable("password") String password)
     {
-        UserDTO userDTO = userService.getUserByCredentials(email,password);
+        UserDetailsDTO userDTO = userService.getUserDetailsByCredentials(email,password);
         if(userDTO != null){
             return  new ResponseEntity<>(userDTO, HttpStatus.OK);
         }else{

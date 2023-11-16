@@ -38,7 +38,7 @@ public class BookController {
     }
 
     @GetMapping("/list/by-user/{userId}")
-    public ResponseEntity<BookDTO> getAllUserBooks(@PathVariable("userId") int id){
+    public ResponseEntity<BookDTO> getAllUserBooks(@PathVariable("userId") String id){
         List<BookDTO> booksList = bookService.getAllUserBooks(id);
         return new ResponseEntity(booksList,HttpStatus.OK);
     }

@@ -104,8 +104,9 @@ public class BookServiceImplementation implements BookService {
         }
     }
 
-    public List<BookDTO> getAllUserBooks(int id){
-        User user = userMapper.fromDtoToUser(userService.getUserById(id));
+    public List<BookDTO> getAllUserBooks(String id){
+        User user = userMapper.fromDtoToUser(userService.getUserByEmail(id));
+       // User user = userMapper.fromDtoToUser(userService.getUserById(id));
         List<BookDTO> userBooks = new ArrayList<>();
 
         if(bookRepository.getBooksByUser(user) != null){

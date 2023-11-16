@@ -15,6 +15,7 @@ public class CarMapper {
     public Car fromDtoToCar(CarDTO carDTO){
         Car car = null;
         if(carDTO != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             car = mapper.map(carDTO,Car.class);
         }
         return car;
@@ -23,6 +24,7 @@ public class CarMapper {
     public CarDTO fromCarToDTO(Car car){
         CarDTO carDTO = null;
         if(car != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             carDTO = mapper.map(car,CarDTO.class);
         }
         return carDTO;
@@ -31,6 +33,7 @@ public class CarMapper {
 
     public void updateCar(Car car, CarDTO carDTO){
         if(car != null && carDTO != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             mapper.map(carDTO,car);
         }
     }

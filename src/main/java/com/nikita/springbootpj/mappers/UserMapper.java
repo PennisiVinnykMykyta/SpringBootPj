@@ -14,6 +14,7 @@ public class UserMapper {
     public User fromDtoToUser(UserDTO userDTO){
         User user = null;
         if(userDTO != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             user = mapper.map(userDTO,User.class);
         }
         return user;
@@ -23,6 +24,7 @@ public class UserMapper {
         UserDTO userDTO = null;
 
         if(user != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             userDTO = mapper.map(user, UserDTO.class);
         }
         return userDTO;
@@ -30,6 +32,7 @@ public class UserMapper {
 
     public void updateUser(User user, UserDTO userDTO) {
         if(user != null && userDTO != null){
+            mapper.getConfiguration().setAmbiguityIgnored(true);
             mapper.map(userDTO, user);
         }
     }
