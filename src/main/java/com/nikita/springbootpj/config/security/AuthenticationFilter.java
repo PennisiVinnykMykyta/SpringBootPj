@@ -38,7 +38,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String token = null;
 
         if(requestHeader != null && requestHeader.startsWith("Bearer")){ //my prefix
-            token = requestHeader.substring(7); //get token after the word bearer
+            token = requestHeader.substring(6); //get token after the word bearer
 
             try{
                 username = this.jwtProvider.getUsernameFromToken(token);

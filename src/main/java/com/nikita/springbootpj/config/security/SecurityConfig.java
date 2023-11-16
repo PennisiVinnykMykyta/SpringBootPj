@@ -1,6 +1,7 @@
 package com.nikita.springbootpj.config.security;
 
 
+import com.nikita.springbootpj.config.WebApplicationContextConfig;
 import com.nikita.springbootpj.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,37 +35,44 @@ public class SecurityConfig{
     private final UserRepository userRepository;
 
     public static final String[] ADMIN_URL_MATCHER = {
-            "/**"
+            "/api/user/*",
+            "/api/car/*",
+            "/api/booking/*"
     };
 
     public static final String[] USER_URL_MATCHER = {
-            "/user/add-or-update",
+            "/api/user/get/*",
+            "/api/user/add-or-update",
 
-            "/booking/add-or-update",
-            "/booking/delete/{bookId}",
-            "/booking/list/by-user/{userId}",
+            "/api/booking/add-or-update",
+            "/api/booking/delete/*",
+            "/api/booking/list/by-user/*",
 
-            "/car/available-cars/{start},{finish}"
+            "/api/car/available-cars"
     };
+
+    private final WebApplicationContextConfig webApplicationContextConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
         return http
+                .cors(cors -> cors.disable())
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/user/auth").permitAll()
-                        .requestMatchers(ADMIN_URL_MATCHER).hasAuthority("ADMIN")
-                        .requestMatchers(USER_URL_MATCHER).hasAuthority("CUSTOMER")
+                        .requestMatchers(ADMIN_URL_MATCHER).hasAnyAuthority("ROLE_ADMIN")
+                        .requestMatchers(USER_URL_MATCHER).hasAnyAuthority("ROLE_CUSTOMER")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider())
                 .build();
     }
 
    @Bean //for testing
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web) -> web.ignoring().requestMatchers("/user/auth");//.anyRequest();
+        return (web) -> web.ignoring().requestMatchers(HttpMethod.OPTIONS).requestMatchers("/user/auth");//.anyRequest();
     }
 
     @Bean
