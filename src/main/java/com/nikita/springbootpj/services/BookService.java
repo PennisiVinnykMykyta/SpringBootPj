@@ -2,6 +2,7 @@ package com.nikita.springbootpj.services;
 
 import com.nikita.springbootpj.dto.BookDTO;
 import com.nikita.springbootpj.dto.BookRequestDTO;
+import com.nikita.springbootpj.dto.BookToModifyDTO;
 import com.nikita.springbootpj.dto.CarDTO;
 
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ public interface BookService{
 
     void deleteBookById(int id); //
 
-    void saveOrUpdateBook(BookRequestDTO bookRequestDTO); //
+    void saveOrUpdateBook(BookToModifyDTO bookRequestDTO); //
 
     List<BookDTO> getAllUserBooks(String id);
 

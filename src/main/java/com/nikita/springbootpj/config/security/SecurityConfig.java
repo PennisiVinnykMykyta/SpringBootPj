@@ -5,6 +5,7 @@ import com.nikita.springbootpj.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,17 +33,17 @@ public class SecurityConfig{
     private final UserRepository userRepository;
 
     public static final String[] ADMIN_URL_MATCHER = {
-            "/api/**"
+            "/**"
     };
 
     public static final String[] USER_URL_MATCHER = {
-            "/api/user/add-or-update",
+            "/user/add-or-update",
 
-            "/api/booking/add-or-update",
-            "/api/booking/delete/{bookId}",
-            "/api/booking/list/by-user/{userId}",
+            "/booking/add-or-update",
+            "/booking/delete/{bookId}",
+            "/booking/list/by-user/{userId}",
 
-            "/api/car/available-cars/{start},{finish}"
+            "/car/available-cars/{start},{finish}"
     };
 
     @Bean
@@ -49,8 +51,9 @@ public class SecurityConfig{
         return http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/user/auth").permitAll()
                         .requestMatchers(ADMIN_URL_MATCHER).hasAuthority("ADMIN")
-                        .requestMatchers(USER_URL_MATCHER).hasAuthority("USER")
+                        .requestMatchers(USER_URL_MATCHER).hasAuthority("CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -58,9 +61,9 @@ public class SecurityConfig{
                 .build();
     }
 
-    @Bean //for testing
+   @Bean //for testing
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web) -> web.ignoring().anyRequest();
+        return (web) -> web.ignoring().requestMatchers("/user/auth");//.anyRequest();
     }
 
     @Bean

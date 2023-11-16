@@ -2,6 +2,7 @@ package com.nikita.springbootpj.services.implementations;
 
 import com.nikita.springbootpj.dto.BookDTO;
 import com.nikita.springbootpj.dto.BookRequestDTO;
+import com.nikita.springbootpj.dto.BookToModifyDTO;
 import com.nikita.springbootpj.dto.CarDTO;
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.Car;
@@ -86,20 +87,33 @@ public class BookServiceImplementation implements BookService {
         return books;
     }
 //passo id da angular poi trovo le entità con quel id e li setto al mio book
-    public void saveOrUpdateBook(BookRequestDTO bookRequestDto){
-        User user = userRepository.findById(bookRequestDto.getUserId()).orElseThrow(() -> new RuntimeException("User Not found"));
-        Car car = carRepository.findById(bookRequestDto.getCarId()).orElseThrow(() -> new RuntimeException("Car not found"));
+    public void saveOrUpdateBook(BookToModifyDTO bookToModifyDTO){
+        System.out.println(bookToModifyDTO.getEmail());
+        User user = userRepository.getUserByEmail(bookToModifyDTO.getEmail());
+        Car car = carRepository.findById(bookToModifyDTO.getCarId()).orElseThrow(() -> new RuntimeException("Car not found"));
 
-        if(bookRequestDto.getBookId() == null){
-            bookRepository.save(bookMapper.fromRequestDtoToBook(user,car,bookRequestDto));
-        }else{
-            Optional<Book> optionalBook = bookRepository.findById(bookRequestDto.getBookId());
-            if(optionalBook.isPresent()){
-                Book book = optionalBook.get(); //prendiamo l'entità associata
-                System.out.println(book);
 
-                bookMapper.updateBook(book,bookRequestDto,car);
-                bookRepository.save(book);
+        if(user.getId() != null){
+            //molto pasticcioso ma per adesso inizializzo cosi il mio book da modificare poi dovro' aggiungere un mapper corretto
+            BookRequestDTO bookRequestDto = new BookRequestDTO();
+            bookRequestDto.setBookId(bookToModifyDTO.getBookId());
+            bookRequestDto.setCarId(bookToModifyDTO.getCarId());
+            bookRequestDto.setUserId(user.getId());
+            bookRequestDto.setStartDate(bookToModifyDTO.getStartDate());
+            bookRequestDto.setEndDate(bookToModifyDTO.getEndDate());
+
+
+            if(bookToModifyDTO.getBookId() == null){
+              bookRepository.save(bookMapper.fromRequestDtoToBook(user,car,bookRequestDto));
+            }else{
+              Optional<Book> optionalBook = bookRepository.findById(bookToModifyDTO.getBookId());
+                if(optionalBook.isPresent()){
+                  Book book = optionalBook.get(); //prendiamo l'entità associata
+                  System.out.println(book);
+
+                  bookMapper.updateBook(book,bookRequestDto,car);
+                  bookRepository.save(book);
+                }
             }
         }
     }

@@ -19,7 +19,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer { //gestisc
             {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("http://localhost:8080,http://localhost:4200")
+                        .allowedOrigins("http://localhost:8080,http://localhost:4200")  //http://localhost:8080,http://localhost:4200
                         .allowedMethods("POST","GET","PUT","DELETE");
             }
         };
