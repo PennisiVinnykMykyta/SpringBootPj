@@ -37,16 +37,23 @@ public class BookServiceImplementation implements BookService {
     private final CarRepository carRepository;
     private final UserRepository userRepository;
 
+
+
     public List<CarDTO> bookedCars(LocalDate start, LocalDate finish){
+        List<Book> conflictingBooks = new ArrayList<>();
+
         List<Book> startIsBetween = bookRepository.getBooksByStartDateBetween(start,finish);
         List<Book> finishIsBetween = bookRepository.getBooksByEndDateBetween(start,finish);
-        List<Book> conflictingBooks = new ArrayList<>();
+        List<Book> startAndFinishInclude = bookRepository.getBooksByStartDateBeforeAndEndDateAfter(start, finish);
         conflictingBooks.addAll(startIsBetween);
         conflictingBooks.addAll(finishIsBetween);
+        conflictingBooks.addAll(startAndFinishInclude);
 
         List<CarDTO> bookedCars = new ArrayList<>();
         for(Book book : conflictingBooks){
-            bookedCars.add(carMapper.fromCarToDTO(book.getCar()));
+            if(book.getValid()){  //la macchina non sara' prenotabile solo se la prenotazione e' stata gia' confermata
+                bookedCars.add(carMapper.fromCarToDTO(book.getCar()));
+            }
         }
         return bookedCars;
     }
