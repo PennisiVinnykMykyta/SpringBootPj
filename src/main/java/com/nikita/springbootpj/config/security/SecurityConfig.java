@@ -1,8 +1,5 @@
 package com.nikita.springbootpj.config.security;
 
-
-import com.nikita.springbootpj.config.WebApplicationContextConfig;
-import com.nikita.springbootpj.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,9 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -32,8 +27,6 @@ public class SecurityConfig{
 
     private final UserDetailsService userDetailsService;
 
-    private final UserRepository userRepository;
-
     public static final String[] ADMIN_URL_MATCHER = {
             "/api/user/*",
             "/api/car/*",
@@ -51,13 +44,11 @@ public class SecurityConfig{
             "/api/car/available-cars"
     };
 
-    private final WebApplicationContextConfig webApplicationContextConfig;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
         return http
-                .cors(cors -> cors.disable())
-                .csrf(csrf -> csrf.disable())
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
@@ -70,9 +61,9 @@ public class SecurityConfig{
                 .build();
     }
 
-   @Bean //for testing
+   @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web) -> web.ignoring().requestMatchers(HttpMethod.OPTIONS).requestMatchers("/user/auth");//.anyRequest();
+        return (web) -> web.ignoring().requestMatchers(HttpMethod.OPTIONS).requestMatchers("/user/auth");
     }
 
     @Bean

@@ -1,15 +1,15 @@
 package com.nikita.springbootpj.config;
 
+import lombok.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
-@Configuration //cosi che spring sappia che questa è la classe di configurazione
-public class WebApplicationContextConfig implements WebMvcConfigurer { //gestisce le configurazioni dell'applicazione
+@Configuration
+public class WebApplicationContextConfig implements WebMvcConfigurer {
 
     @Bean
     public WebMvcConfigurer corsConfigurer()
@@ -17,7 +17,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer { //gestisc
         return new WebMvcConfigurer()
         {
             @Override
-            public void addCorsMappings(CorsRegistry registry)
+            public void addCorsMappings(@NonNull CorsRegistry registry)
             {
                 registry
                         .addMapping("/**")

@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class CarController {
     }
 
     @RequestMapping(value = "/add-or-update", method = {RequestMethod.PUT, RequestMethod.POST})
-    public void addOrUpdateCar(@RequestBody CarDTO carDTO) throws ParseException {
+    public void addOrUpdateCar(@RequestBody CarDTO carDTO){
         carService.saveOrUpdateCar(carDTO);
     }
 

@@ -18,5 +18,3 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     List<Book> getBooksByUser(User user);
 }
-
-//OrEndDateBetween

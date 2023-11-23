@@ -6,7 +6,6 @@ import com.nikita.springbootpj.dto.UserDetailsDTO;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
 public interface UserService {
 
@@ -17,10 +16,7 @@ public interface UserService {
 
     UserDTO getUserByEmail(String email);
 
-    UserDetailsDTO getUserDetailsByCredentials(String email, String password);
-
-
-    public UserAuthDTO authenticate(String email, String password);
+    UserAuthDTO authenticate(String email, String password);
 
     void saveOrUpdateUser(UserDTO userDTO) throws ParseException;
 }

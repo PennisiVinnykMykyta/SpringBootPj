@@ -70,8 +70,6 @@ public class BookServiceImplementation implements BookService {
             if(book.getValid() != null){
                 book.setValid(!book.getValid());
                 bookRepository.save(book);
-            }else{
-                System.out.println("Couldn't change books validity status");
             }
         }
     }
@@ -80,8 +78,6 @@ public class BookServiceImplementation implements BookService {
         BookDTO bookDTO = this.getBookById(id);
         if(bookDTO != null){
             bookRepository.deleteById(bookDTO.getId());
-        }else{
-            System.out.println("Couldn't Delete book: " + id);
         }
     }
 
@@ -93,15 +89,13 @@ public class BookServiceImplementation implements BookService {
         }
         return books;
     }
-//passo id da angular poi trovo le entità con quel id e li setto al mio book
+
     public void saveOrUpdateBook(BookToModifyDTO bookToModifyDTO){
-        System.out.println(bookToModifyDTO.getEmail());
         User user = userRepository.getUserByEmail(bookToModifyDTO.getEmail());
         Car car = carRepository.findById(bookToModifyDTO.getCarId()).orElseThrow(() -> new RuntimeException("Car not found"));
 
 
         if(user.getId() != null){
-            //molto pasticcioso ma per adesso inizializzo cosi il mio book da modificare poi dovro' aggiungere un mapper corretto
             BookRequestDTO bookRequestDto = new BookRequestDTO();
             bookRequestDto.setBookId(bookToModifyDTO.getBookId());
             bookRequestDto.setCarId(bookToModifyDTO.getCarId());
@@ -115,8 +109,7 @@ public class BookServiceImplementation implements BookService {
             }else{
               Optional<Book> optionalBook = bookRepository.findById(bookToModifyDTO.getBookId());
                 if(optionalBook.isPresent()){
-                  Book book = optionalBook.get(); //prendiamo l'entità associata
-                  System.out.println(book);
+                  Book book = optionalBook.get();
 
                   bookMapper.updateBook(book,bookRequestDto,car);
                   bookRepository.save(book);
@@ -127,11 +120,9 @@ public class BookServiceImplementation implements BookService {
 
     public List<BookDTO> getAllUserBooks(String id){
         User user = userMapper.fromDtoToUser(userService.getUserByEmail(id));
-       // User user = userMapper.fromDtoToUser(userService.getUserById(id));
         List<BookDTO> userBooks = new ArrayList<>();
 
         if(bookRepository.getBooksByUser(user) != null){
-            System.out.println("books not empty");
             for(Book book : bookRepository.getBooksByUser(user)){
                 userBooks.add(bookMapper.fromBookToDTO(book));
             }

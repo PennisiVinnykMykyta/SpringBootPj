@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +26,20 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private final UserInfoService userDetailsService;
     private final JwtProvider jwtProvider;
-    private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
+    private final Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
 
     @Override
-    protected  void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected  void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws SecurityException, IOException, ServletException {
 
-        String requestHeader = request.getHeader("Authorization"); //my header param
+        String requestHeader = request.getHeader("Authorization");     //my header param
         logger.info("Header: {}",requestHeader);
 
         String username = null;
         String token = null;
 
-        if(requestHeader != null && requestHeader.startsWith("Bearer")){ //my prefix
-            token = requestHeader.substring(6); //get token after the word bearer
+        if(requestHeader != null && requestHeader.startsWith("Bearer")){  //my prefix
+            token = requestHeader.substring(6);                 //get token after the word bearer
 
             try{
                 username = this.jwtProvider.getUsernameFromToken(token);
@@ -61,7 +62,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            Boolean validateToken = this.jwtProvider.validateToken(token, userDetails);
+            boolean validateToken = this.jwtProvider.validateToken(token, userDetails);
             if(validateToken){
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());

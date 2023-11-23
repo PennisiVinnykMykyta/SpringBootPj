@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,18 +35,6 @@ public class UserController {
         return this.userService.authenticate(userDetailsDTO.getEmail(),userDetailsDTO.getPassword());
     }
 
-    @PostMapping("/verify/{email},{password}")
-    public ResponseEntity<UserDetailsDTO> getUserByCredentials(
-            @PathVariable("email") String email,
-            @PathVariable("password") String password)
-    {
-        UserDetailsDTO userDTO = userService.getUserDetailsByCredentials(email,password);
-        if(userDTO != null){
-            return  new ResponseEntity<>(userDTO, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-        }
-    }
     @GetMapping("/list")
     public ResponseEntity<UserDTO> getAllUsers(){
         List<UserDTO> usersList = userService.getAllUsers();

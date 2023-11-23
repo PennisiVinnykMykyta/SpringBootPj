@@ -1,10 +1,7 @@
 package com.nikita.springbootpj.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.*;
