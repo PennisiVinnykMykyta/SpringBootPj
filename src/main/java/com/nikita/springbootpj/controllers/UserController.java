@@ -1,6 +1,7 @@
 package com.nikita.springbootpj.controllers;
 
 
+import com.nikita.springbootpj.dto.ImageInfoDTO;
 import com.nikita.springbootpj.dto.UserAuthDTO;
 import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.dto.UserDetailsDTO;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -29,6 +31,18 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping
+    public void uploadImage(@RequestBody ImageInfoDTO imageInfo) throws IOException {
+        userService.uploadProfilePic(imageInfo.getImage(),imageInfo.getUserId());
+    }
+
+    @GetMapping("/profile-pic/download/{userId}")
+    public ResponseEntity<byte[]> downloadImage(@PathVariable int userId) throws IOException{
+        byte[] image = userService.downloadProfilePic(userId);
+        return new ResponseEntity<byte[]>(image,HttpStatus.OK);
+    }
+
 
     @PostMapping("/auth")
     public UserAuthDTO authentication(@RequestBody UserDetailsDTO userDetailsDTO){
