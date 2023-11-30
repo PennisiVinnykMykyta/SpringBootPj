@@ -30,12 +30,14 @@ public class SecurityConfig{
     public static final String[] ADMIN_URL_MATCHER = {
             "/api/user/*",
             "/api/car/*",
-            "/api/booking/*"
+            "/api/booking/*",
+            "/api/*"
     };
 
     public static final String[] USER_URL_MATCHER = {
             "/api/user/get/*",
             "/api/user/add-or-update",
+            "/api/user/profile-pic/*",
 
             "/api/booking/add-or-update",
             "/api/booking/delete/*",

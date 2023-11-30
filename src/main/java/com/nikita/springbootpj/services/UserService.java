@@ -22,9 +22,9 @@ public interface UserService {
 
     void saveOrUpdateUser(UserDTO userDTO) throws ParseException;
 
-    void uploadProfilePic(MultipartFile file,int userId) throws IOException;
+    void uploadProfilePic(MultipartFile file) throws IOException;
 
-    byte[] downloadProfilePic(int userId) throws IOException;
+    String downloadProfilePic(int userId) throws IOException;
 
 
 }
