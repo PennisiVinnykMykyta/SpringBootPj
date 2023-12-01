@@ -2,14 +2,13 @@ package com.nikita.springbootpj.services.implementations;
 import com.nikita.springbootpj.config.security.JwtProvider;
 import com.nikita.springbootpj.dto.UserAuthDTO;
 import com.nikita.springbootpj.dto.UserDTO;
-import com.nikita.springbootpj.entities.FileData;
 import com.nikita.springbootpj.entities.User;
 import com.nikita.springbootpj.entities.enums.UserType;
 import com.nikita.springbootpj.mappers.UserMapper;
-import com.nikita.springbootpj.repositories.FileDataRepository;
 import com.nikita.springbootpj.repositories.UserRepository;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.util.FileUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,48 +28,39 @@ public class UserServiceImplementation implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final FileDataRepository fileDataRepository;
-    private static final String folderPath = "Users/Nikit/Desktop/ProfilePics/";
+    private static final String folderPath = "C:/Users/Nikit/Desktop/Lavoro/Proggetti/Proggetti Completi/SpringBootPj/src/main/resources/ProfilePics/";
 
-   public void uploadProfilePic(MultipartFile file,int userId) throws IOException{
-        String path = folderPath+file.getOriginalFilename();
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()){
-            FileData fileData = new FileData();
-            fileData.setUser(user.get());
-            fileData.setName(file.getOriginalFilename());
-            fileData.setType(file.getContentType());
-            fileData.setFilePath(path);
+   public void uploadProfilePic(MultipartFile file) throws IOException{
 
-            fileDataRepository.save(fileData);
+       //extract the user id from the multifile and save the imageName to user
+       int endIndex = file.getOriginalFilename().indexOf("_");
+       int userId = Integer.parseInt(file.getOriginalFilename().substring(0,endIndex));
+       User user = userRepository.findById(userId).get();
 
-            file.transferTo(new File(path));
-
-            System.out.println("file saved");
-
+       //if the user already has a profile pic then we delete it and put a new one in the folder
+       if(user.getProfilePicName() != null){
+           File currentImage = new File(folderPath+user.getProfilePicName());
+           currentImage.delete();
        }
+
+       user.setProfilePicName(file.getOriginalFilename());
+       userRepository.save(user);
+
+       file.transferTo(new File(folderPath+file.getOriginalFilename()));
     }
 
-    public byte[] downloadProfilePic(int userId) throws IOException {
-        Optional<User> user = userRepository.findById(userId);
+   public String downloadProfilePic(int userId) throws IOException {
+       Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
-            FileData path = fileDataRepository.findFileDataByUser(user.get());
+            String path = user.get().getProfilePicName();
             if (path != null) {
-                String imagePath = path.getFilePath();
-                return Files.readAllBytes(new File(imagePath).toPath());
 
+                byte[] fileContent = FileUtil.readAsByteArray(new File(folderPath+path));
+                String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+                return encodedImage;
             }
         }
         return null;
-    }
-
-
-    public UserDTO getUserByCredentials(String email,String password){
-        UserDTO userDTO = null;
-        if(userRepository.existsByEmailAndPassword(email,password)){
-            userDTO = userMapper.fromUserToDTO(userRepository.getUserByEmail(email));
-        }
-        return userDTO;
     }
 
     public UserDTO getUserById(int id){
