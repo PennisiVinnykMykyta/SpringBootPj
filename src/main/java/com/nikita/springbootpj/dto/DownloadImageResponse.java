@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ImageString {
+public class DownloadImageResponse {
     private String image;
+    private String contentType;
 }

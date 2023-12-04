@@ -1,13 +1,14 @@
 package com.nikita.springbootpj.controllers;
 
 
-import com.nikita.springbootpj.dto.ImageString;
+import com.nikita.springbootpj.dto.DownloadImageResponse;
 import com.nikita.springbootpj.dto.UserAuthDTO;
 import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.dto.UserDetailsDTO;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,20 +34,16 @@ public class UserController {
         }
     }
 
-    @PostMapping("/profile-pic/upload")
-    public void uploadImage(@RequestPart("imageFile")MultipartFile file) throws IOException {
-        userService.uploadProfilePic(file);
+    @PostMapping("/profile-pic/upload/{userId}")
+    public void uploadImage(@RequestPart("imageFile")MultipartFile file,@PathVariable int userId) throws IOException {
+        userService.uploadProfilePic(file,userId);
     }
 
-    @GetMapping(value = "/profile-pic/download/{userId}")
-    public ResponseEntity<ImageString> downloadImage(@PathVariable int userId) throws IOException{
-        String image = userService.downloadProfilePic(userId);
-        System.out.println(image);
-        ImageString imageString = new ImageString();
-        imageString.setImage(image);
-        return new ResponseEntity<>(imageString,HttpStatus.OK);
+    @GetMapping(value = "/profile-pic/download/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DownloadImageResponse> downloadImage(@PathVariable int userId) throws IOException{
 
-        //return  null;
+        DownloadImageResponse downloadImageResponse = userService.downloadProfilePic(userId);
+        return new ResponseEntity<>(downloadImageResponse,HttpStatus.OK);
     }
 
 

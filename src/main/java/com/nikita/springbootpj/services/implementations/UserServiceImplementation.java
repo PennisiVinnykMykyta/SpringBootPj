@@ -1,5 +1,6 @@
 package com.nikita.springbootpj.services.implementations;
 import com.nikita.springbootpj.config.security.JwtProvider;
+import com.nikita.springbootpj.dto.DownloadImageResponse;
 import com.nikita.springbootpj.dto.UserAuthDTO;
 import com.nikita.springbootpj.dto.UserDTO;
 import com.nikita.springbootpj.entities.User;
@@ -9,6 +10,7 @@ import com.nikita.springbootpj.repositories.UserRepository;
 import com.nikita.springbootpj.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.util.FileUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,36 +30,51 @@ public class UserServiceImplementation implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private static final String folderPath = "C:/Users/Nikit/Desktop/Lavoro/Proggetti/Proggetti Completi/SpringBootPj/src/main/resources/ProfilePics/";
 
-   public void uploadProfilePic(MultipartFile file) throws IOException{
+    @Value("${profile-folder.path}")
+    private String folderPath;
 
-       //extract the user id from the multifile and save the imageName to user
-       int endIndex = file.getOriginalFilename().indexOf("_");
-       int userId = Integer.parseInt(file.getOriginalFilename().substring(0,endIndex));
-       User user = userRepository.findById(userId).get();
+   public void uploadProfilePic(MultipartFile file,int userId) throws IOException{
 
-       //if the user already has a profile pic then we delete it and put a new one in the folder
-       if(user.getProfilePicName() != null){
-           File currentImage = new File(folderPath+user.getProfilePicName());
-           currentImage.delete();
+       Optional<User> optionalUser = userRepository.findById(userId);
+
+       if(optionalUser.isPresent()){
+           User user = optionalUser.get();
+
+           //if the user already has a profile pic then we delete it and put a new one in the folder
+           if(user.getProfilePicName() != null){
+               File currentImage = new File(folderPath+userId+user.getProfilePicName());
+               if(!currentImage.delete()){
+                   throw new IOException("Couldn't delete Profile Pic");
+               }
+           }
+
+           user.setProfilePicName(file.getOriginalFilename());
+           userRepository.save(user);
+
+           file.transferTo(new File(folderPath+userId+file.getOriginalFilename()));
        }
 
-       user.setProfilePicName(file.getOriginalFilename());
-       userRepository.save(user);
 
-       file.transferTo(new File(folderPath+file.getOriginalFilename()));
     }
 
-   public String downloadProfilePic(int userId) throws IOException {
-       Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            String path = user.get().getProfilePicName();
+   public DownloadImageResponse downloadProfilePic(int userId) throws IOException {
+       Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            String path = user.getProfilePicName();
             if (path != null) {
 
-                byte[] fileContent = FileUtil.readAsByteArray(new File(folderPath+path));
+                String imageType = path.substring(path.lastIndexOf('.')+1);
+
+                byte[] fileContent = FileUtil.readAsByteArray(new File(folderPath+userId+path));
                 String encodedImage = Base64.getEncoder().encodeToString(fileContent);
-                return encodedImage;
+
+                DownloadImageResponse downloadImageResponse = new DownloadImageResponse();
+                downloadImageResponse.setImage(encodedImage);
+                downloadImageResponse.setContentType(imageType);
+
+                return downloadImageResponse;
             }
         }
         return null;
