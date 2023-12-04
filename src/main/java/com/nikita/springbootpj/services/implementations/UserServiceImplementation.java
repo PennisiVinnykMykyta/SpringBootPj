@@ -72,7 +72,7 @@ public class UserServiceImplementation implements UserService {
                 imageType = path.substring(path.lastIndexOf('.')+1);
 
                 fileContent = FileUtil.readAsByteArray(new File(folderPath+path));
-
+//
             }else{
                 imageType = "jpg";
 
