@@ -43,13 +43,13 @@ public class UserServiceImplementation implements UserService {
 
            //if the user already has a profile pic then we delete it and put a new one in the folder
            if(user.getProfilePicName() != null){
-               File currentImage = new File(folderPath+userId+user.getProfilePicName());
+               File currentImage = new File(folderPath+user.getProfilePicName());
                if(!currentImage.delete()){
                    throw new IOException("Couldn't delete Profile Pic");
                }
            }
 
-           user.setProfilePicName(file.getOriginalFilename());
+           user.setProfilePicName(userId+file.getOriginalFilename());
            userRepository.save(user);
 
            file.transferTo(new File(folderPath+userId+file.getOriginalFilename()));
@@ -63,21 +63,31 @@ public class UserServiceImplementation implements UserService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             String path = user.getProfilePicName();
+            DownloadImageResponse downloadImageResponse = new DownloadImageResponse();
+            byte[] fileContent;
+            String imageType;
+
             if (path != null) {
 
-                String imageType = path.substring(path.lastIndexOf('.')+1);
+                imageType = path.substring(path.lastIndexOf('.')+1);
 
-                byte[] fileContent = FileUtil.readAsByteArray(new File(folderPath+userId+path));
-                String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+                fileContent = FileUtil.readAsByteArray(new File(folderPath+path));
 
-                DownloadImageResponse downloadImageResponse = new DownloadImageResponse();
-                downloadImageResponse.setImage(encodedImage);
-                downloadImageResponse.setContentType(imageType);
+            }else{
+                imageType = "jpg";
 
-                return downloadImageResponse;
+                fileContent = FileUtil.readAsByteArray(new File(folderPath+"basicUser.jpg"));
             }
+
+            String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+
+            downloadImageResponse.setImage(encodedImage);
+            downloadImageResponse.setContentType(imageType);
+            return downloadImageResponse;
+        }else{
+            throw new IOException ("UserNotFound!");
         }
-        return null;
+
     }
 
     public UserDTO getUserById(int id){
