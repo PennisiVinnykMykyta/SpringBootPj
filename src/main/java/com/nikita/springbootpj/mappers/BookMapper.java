@@ -6,6 +6,7 @@ import com.nikita.springbootpj.dto.BookRequestDTO;
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.Car;
 import com.nikita.springbootpj.entities.User;
+import com.nikita.springbootpj.entities.enums.BookState;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class BookMapper {
             book = mapper.map(bookRequestDTO,Book.class);
             book.setUser(user);
             book.setCar(car);
-            book.setValid(false);
+            book.setState(BookState.STANDBY);
         }
         return book;
     }
@@ -48,7 +49,7 @@ public class BookMapper {
             book.setStartDate(bookRequestDTO.getStartDate());
             book.setEndDate(bookRequestDTO.getEndDate());
             book.setCar(car);
-            book.setValid(false);
+            book.setState(BookState.STANDBY);
         }
 
     }

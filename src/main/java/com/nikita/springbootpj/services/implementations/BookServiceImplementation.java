@@ -7,6 +7,7 @@ import com.nikita.springbootpj.dto.CarDTO;
 import com.nikita.springbootpj.entities.Book;
 import com.nikita.springbootpj.entities.Car;
 import com.nikita.springbootpj.entities.User;
+import com.nikita.springbootpj.entities.enums.BookState;
 import com.nikita.springbootpj.mappers.BookMapper;
 import com.nikita.springbootpj.mappers.CarMapper;
 import com.nikita.springbootpj.mappers.UserMapper;
@@ -51,7 +52,7 @@ public class BookServiceImplementation implements BookService {
 
         List<CarDTO> bookedCars = new ArrayList<>();
         for(Book book : conflictingBooks){
-            if(book.getValid()){  //la macchina non sara' prenotabile solo se la prenotazione e' stata gia' confermata
+            if(book.getState() == BookState.APPROVED){  //la macchina non sara' prenotabile solo se la prenotazione e' stata gia' confermata
                 bookedCars.add(carMapper.fromCarToDTO(book.getCar()));
             }
         }
@@ -67,10 +68,15 @@ public class BookServiceImplementation implements BookService {
     public void acceptBooking(int id){
         if(bookRepository.findById(id).isPresent()){
             Book book = bookRepository.findById(id).get();
-            if(book.getValid() != null){
-                book.setValid(!book.getValid());
-                bookRepository.save(book);
-            }
+            book.setState(BookState.APPROVED);
+            bookRepository.save(book);
+        }
+    }
+    public void declineBooking(int id){
+        if(bookRepository.findById(id).isPresent()){
+            Book book = bookRepository.findById(id).get();
+            book.setState(BookState.DISAPPROVED);
+            bookRepository.save(book);
         }
     }
 

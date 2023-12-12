@@ -13,6 +13,6 @@ public class BookDTO {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    private Boolean valid;
+    private String bookState;
 
 }

@@ -1,5 +1,6 @@
 package com.nikita.springbootpj.entities;
 
+import com.nikita.springbootpj.entities.enums.BookState;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +36,6 @@ public class Book implements Serializable{
     @Column(name="end_date")
     private LocalDate endDate;
 
-    @Column(name="valid")
-    private Boolean valid;
+    @Column(name="state")
+    private BookState state;
 }

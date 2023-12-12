@@ -53,6 +53,8 @@ public class UserServiceImplementation implements UserService {
            userRepository.save(user);
 
            file.transferTo(new File(folderPath+userId+file.getOriginalFilename()));
+       } else{
+           throw new IOException("couldn't transfer the file to the folder");
        }
 
 
@@ -72,7 +74,7 @@ public class UserServiceImplementation implements UserService {
                 imageType = path.substring(path.lastIndexOf('.')+1);
 
                 fileContent = FileUtil.readAsByteArray(new File(folderPath+path));
-//
+
             }else{
                 imageType = "jpg";
 

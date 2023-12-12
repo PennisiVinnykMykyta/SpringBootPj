@@ -52,8 +52,12 @@ public class BookController {
         bookService.deleteBookById(id);
     }
 
-    @RequestMapping(value = "/accept-or-decline", method = {RequestMethod.PUT, RequestMethod.POST})
-    public void acceptOrDeclineBook(@RequestBody Integer id){
+    @RequestMapping(value = "/accept", method = {RequestMethod.PUT, RequestMethod.POST})
+    public void acceptBook(@RequestBody Integer id){
         bookService.acceptBooking(id);
+    }
+    @RequestMapping(value = "/decline", method = {RequestMethod.PUT, RequestMethod.POST})
+    public void declineBook(@RequestBody Integer id){
+        bookService.declineBooking(id);
     }
 }

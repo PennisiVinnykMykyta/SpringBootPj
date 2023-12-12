@@ -14,6 +14,8 @@ public interface BookService{
     List<BookDTO> getAllBooks();
     void acceptBooking(int id); //
 
+    void declineBooking(int id);
+
     List<CarDTO> bookedCars(LocalDate startDate, LocalDate endDate);
 
     void deleteBookById(int id); //
