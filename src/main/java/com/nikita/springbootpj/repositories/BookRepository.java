@@ -17,4 +17,5 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> getBooksByStartDateBeforeAndEndDateAfter(LocalDate start, LocalDate end);
 
     List<Book> getBooksByUser(User user);
+
 }

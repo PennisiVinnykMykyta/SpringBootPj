@@ -33,4 +33,7 @@ public class Car implements Serializable {
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Book> bookings;
 
+    @OneToMany(mappedBy = "car",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Book> carCategories;
+
 }

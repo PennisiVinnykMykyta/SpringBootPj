@@ -23,6 +23,7 @@ public class CarServiceImplementation implements CarService {
     private final CarMapper carMapper;
     private final CarRepository carRepository;
     private final BookService bookService;
+
     public CarDTO getCarById(int id){
         CarDTO carDTO = null;
         if(carRepository.findById(id).isPresent()){
