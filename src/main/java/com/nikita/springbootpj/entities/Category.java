@@ -24,7 +24,7 @@ public class Category implements Serializable {
     private String attribute;
 
     @OneToMany(mappedBy = "category",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Book> carCategories;
+    private List<CarCategory> carCategories;
 
 
 
