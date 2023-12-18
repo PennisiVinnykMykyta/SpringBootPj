@@ -10,4 +10,6 @@ public class CarDTO {
     private String color;
     private String model;
     private String brand;
+    private String image;
+    private String imageType;
 }

@@ -30,6 +30,9 @@ public class Car implements Serializable {
     @Column(name = "brand", nullable = false)
     private String brand;
 
+    @Column(name = "car_pic", nullable = true)
+    private String carPicName;
+
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Book> bookings;
 

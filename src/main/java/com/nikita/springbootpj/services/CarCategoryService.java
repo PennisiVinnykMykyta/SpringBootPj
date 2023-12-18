@@ -10,7 +10,9 @@ public interface CarCategoryService {
 
     void deleteCarCategory(int id);
 
-    List<CarCategoryDTO> getAllCarsCategories(int id);
-    List<CarCategoryDTO> getAllCategorysCars(int id);
+    List<CarCategoryDTO> getCarsCategories(int id);
+    List<CarCategoryDTO> getCategorysCars(int id);
+
+    List<CarCategoryDTO> getAllCarCategories();
 
 }

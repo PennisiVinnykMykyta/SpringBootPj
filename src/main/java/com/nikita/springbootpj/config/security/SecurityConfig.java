@@ -30,8 +30,11 @@ public class SecurityConfig{
     public static final String[] ADMIN_URL_MATCHER = {
             "/api/user/*",
             "/api/car/*",
-            "/api/booking/*",
+            "/api/car/car-pic/upload/",
+            "/api/category/*",
+            "api/car-category/*",
             "/api/*"
+
     };
 
     public static final String[] USER_URL_MATCHER = {
@@ -43,7 +46,10 @@ public class SecurityConfig{
             "/api/booking/delete/*",
             "/api/booking/list/by-user/*",
 
-            "/api/car/available-cars"
+            "/api/car/available-cars",
+
+            "/api/category/list",
+            "/api/car-category/list"
     };
 
     @Bean

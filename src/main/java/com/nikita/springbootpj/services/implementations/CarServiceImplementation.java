@@ -1,17 +1,24 @@
 package com.nikita.springbootpj.services.implementations;
 
 import com.nikita.springbootpj.dto.CarDTO;
+import com.nikita.springbootpj.dto.DownloadImageResponse;
 import com.nikita.springbootpj.entities.Car;
 import com.nikita.springbootpj.mappers.CarMapper;
 import com.nikita.springbootpj.repositories.CarRepository;
 import com.nikita.springbootpj.services.BookService;
 import com.nikita.springbootpj.services.CarService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.util.FileUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +31,80 @@ public class CarServiceImplementation implements CarService {
     private final CarRepository carRepository;
     private final BookService bookService;
 
+    @Value("${profile-folder.path}")
+    private String folderPath;
+
+    public void uploadCarPic(MultipartFile file, int carId) throws IOException {
+
+        Optional<Car> optionalCar = carRepository.findById(carId);
+
+        if(optionalCar.isPresent()){
+            Car car = optionalCar.get();
+
+            if(car.getCarPicName() != null){
+                File currentImage = new File(folderPath+car.getCarPicName());
+                if(!currentImage.delete()){
+                    throw new IOException("Couldn't delete Car Pic");
+                }
+            }
+
+             car.setCarPicName(carId+file.getOriginalFilename());
+            carRepository.save(car);
+
+            file.transferTo(new File(folderPath+carId+file.getOriginalFilename()));
+        } else{
+            throw new IOException("couldn't transfer the file to the folder");
+        }
+
+
+    }
+
+    public DownloadImageResponse downloadCarPic(int carId) throws IOException {
+        Optional<Car> optionalCar = carRepository.findById(carId);
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            String path = car.getCarPicName();
+            DownloadImageResponse downloadImageResponse = new DownloadImageResponse();
+            byte[] fileContent;
+            String imageType;
+
+            if (path != null) {
+
+                imageType = path.substring(path.lastIndexOf('.')+1);
+
+                fileContent = FileUtil.readAsByteArray(new File(folderPath+path));
+
+            }else{
+                imageType = "jpg";
+
+                fileContent = FileUtil.readAsByteArray(new File(folderPath+"basicUser.jpg"));
+            }
+
+            String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+
+            downloadImageResponse.setImage(encodedImage);
+            downloadImageResponse.setContentType(imageType);
+            return downloadImageResponse;
+        }else{
+            throw new IOException ("CarNotFound!");
+        }
+
+    }
+
     public CarDTO getCarById(int id){
         CarDTO carDTO = null;
         if(carRepository.findById(id).isPresent()){
             carDTO = carMapper.fromCarToDTO(carRepository.findById(id).get());
         }
+
+        try {
+            DownloadImageResponse image = this.downloadCarPic(carDTO.getId());
+            carDTO.setImage(image.getImage());
+            carDTO.setImageType(image.getContentType());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return carDTO;
 
     }
@@ -39,6 +115,16 @@ public class CarServiceImplementation implements CarService {
 
         for(Car car: carList){
             cars.add(carMapper.fromCarToDTO(car));
+        }
+
+        for(CarDTO carDTO: cars){
+            try {
+                DownloadImageResponse image = this.downloadCarPic(carDTO.getId());
+                carDTO.setImage(image.getImage());
+                carDTO.setImageType(image.getContentType());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return cars;
     }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/car_category")
+@RequestMapping("/car-category")
 
 public class CarCategoryController {
     private  final CarCategoryService categoryService;
@@ -28,14 +28,20 @@ public class CarCategoryController {
     }
 
     @GetMapping("/list/by-car/{carId}")
-    public ResponseEntity<CarCategoryDTO> getAllCarsCarCategories(@PathVariable("carId") int id){
-        List<CarCategoryDTO> categoryDTOList = categoryService.getAllCarsCategories(id);
+    public ResponseEntity<CarCategoryDTO> getCarsCarCategories(@PathVariable("carId") int id){
+        List<CarCategoryDTO> categoryDTOList = categoryService.getCarsCategories(id);
         return new ResponseEntity(categoryDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/list/by-category/{categoryId}")
-    public ResponseEntity<CarCategoryDTO> getAllCategorysCars(@PathVariable("categoryId") int id){
-        List<CarCategoryDTO> categoryDTOList = categoryService.getAllCategorysCars(id);
+    public ResponseEntity<CarCategoryDTO> getCategorysCars(@PathVariable("categoryId") int id){
+        List<CarCategoryDTO> categoryDTOList = categoryService.getCategorysCars(id);
+        return new ResponseEntity(categoryDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<CarCategoryDTO> getAllCarCategories(){
+        List<CarCategoryDTO> categoryDTOList = categoryService.getAllCarCategories();
         return new ResponseEntity(categoryDTOList, HttpStatus.OK);
     }
 

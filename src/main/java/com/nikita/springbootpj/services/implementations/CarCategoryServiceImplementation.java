@@ -57,7 +57,7 @@ public class CarCategoryServiceImplementation implements CarCategoryService {
         carCategoryRepository.deleteById(id);
     }
 
-    public List<CarCategoryDTO> getAllCategorysCars(int id){
+    public List<CarCategoryDTO> getCategorysCars(int id){
         Category category = categoryMapper.fromDtoToCategory(categoryService.getCategory(id));
         List<CarCategoryDTO> categoryDTOList = new ArrayList<>();
 
@@ -68,7 +68,7 @@ public class CarCategoryServiceImplementation implements CarCategoryService {
         }
         return categoryDTOList;
     }
-    public List<CarCategoryDTO> getAllCarsCategories(int id){
+    public List<CarCategoryDTO> getCarsCategories(int id){
         Car car = carMapper.fromDtoToCar(carService.getCarById(id));
         List<CarCategoryDTO> categoryDTOList = new ArrayList<>();
 
@@ -76,6 +76,15 @@ public class CarCategoryServiceImplementation implements CarCategoryService {
             for(CarCategory carCategory : carCategoryRepository.getCarCategoriesByCar(car)){
                 categoryDTOList.add(carCategoryMapper.fromCarCategoryToDTO(carCategory));
             }
+        }
+        return categoryDTOList;
+    }
+
+    public List<CarCategoryDTO> getAllCarCategories(){
+        List<CarCategory> carCategoryList = carCategoryRepository.findAll();
+        List<CarCategoryDTO> categoryDTOList = new ArrayList<>();
+        for(CarCategory carCategory : carCategoryList){
+            categoryDTOList.add(carCategoryMapper.fromCarCategoryToDTO(carCategory));
         }
         return categoryDTOList;
     }
