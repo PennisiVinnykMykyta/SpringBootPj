@@ -11,4 +11,6 @@ public interface CarCategoryRepository extends JpaRepository<CarCategory,Integer
 
     List<CarCategory> getCarCategoriesByCar(Car car);
     List<CarCategory> getCarCategoriesByCategory(Category category);
+
+    CarCategory getCarCategoryByCarAndCategory(Car car, Category category);
 }

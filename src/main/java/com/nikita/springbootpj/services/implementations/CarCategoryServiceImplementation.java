@@ -37,8 +37,22 @@ public class CarCategoryServiceImplementation implements CarCategoryService {
     private final CarService carService;
 
     public void saveOrUpdateCarCategory(CarCategoryToModifyDTO carCategoryToModifyDTO){
+        System.out.println(carCategoryToModifyDTO);
+
         Car car = carRepository.findById(carCategoryToModifyDTO.getCarId()).orElseThrow(() -> new RuntimeException("Car Not Found"));
-        Category category = categoryRepository.findById(carCategoryToModifyDTO.getCategoryId()).orElseThrow(() -> new RuntimeException("Category Not Found"));
+        Category category = categoryRepository.getCategoryByLabel(carCategoryToModifyDTO.getLabel());
+
+       /* if (category != null) {
+            category.setAttribute(carCategoryToModifyDTO.getAttribute());
+            categoryRepository.save(category);
+        }*/
+
+        System.out.println(carCategoryToModifyDTO.getLabel());
+        System.out.println(carCategoryToModifyDTO.getAttribute());
+
+        if(carCategoryRepository.getCarCategoryByCarAndCategory(car,category) != null){
+            return;
+        }
 
         if(carCategoryToModifyDTO.getCarCategoryId() == null){
             carCategoryRepository.save(carCategoryMapper.fromDTOtoCarCategory(category,car,carCategoryToModifyDTO));

@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/ProfilePics/1checkers.png
+/src/main/resources/ProfilePics/4chess.png
+/src/main/resources/ProfilePics/9chess.png

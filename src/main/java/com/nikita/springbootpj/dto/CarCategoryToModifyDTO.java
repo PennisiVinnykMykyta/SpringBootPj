@@ -9,5 +9,6 @@ public class CarCategoryToModifyDTO {
 
     private Integer carCategoryId;
     private Integer carId;
-    private Integer categoryId;
+    private String label;
+    private String attribute;
 }
