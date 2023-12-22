@@ -1,6 +1,7 @@
 package com.nikita.springbootpj.controllers;
 
 import com.nikita.springbootpj.dto.CarDTO;
+import com.nikita.springbootpj.dto.CategoryDTO;
 import com.nikita.springbootpj.dto.DownloadImageResponse;
 import com.nikita.springbootpj.services.CarService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,16 @@ public class CarController {
         CarDTO carDTO = carService.getCarById(id);
         if(carDTO != null){
             return  new ResponseEntity<>(carDTO, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/list/by-category/{categoryLabel}")
+    public ResponseEntity<CategoryDTO> getCarsOfCategory(@PathVariable("categoryLabel") String label){
+        List<CarDTO> carDTOList = carService.getCarsOfCategory(label);
+        if(carDTOList != null){
+            return new ResponseEntity(carDTOList, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

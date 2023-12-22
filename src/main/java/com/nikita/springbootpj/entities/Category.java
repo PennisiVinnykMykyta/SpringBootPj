@@ -20,7 +20,7 @@ public class Category implements Serializable {
     @Column(name = "label")
     private String label;
 
-    @Column(name ="attribute")
+    @Column(name ="attribute" , unique = true)
     private String attribute;
 
     @OneToMany(mappedBy = "category",fetch = FetchType.LAZY, cascade = CascadeType.ALL)

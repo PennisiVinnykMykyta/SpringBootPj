@@ -3,8 +3,12 @@ package com.nikita.springbootpj.services.implementations;
 import com.nikita.springbootpj.dto.CarDTO;
 import com.nikita.springbootpj.dto.DownloadImageResponse;
 import com.nikita.springbootpj.entities.Car;
+import com.nikita.springbootpj.entities.CarCategory;
+import com.nikita.springbootpj.entities.Category;
 import com.nikita.springbootpj.mappers.CarMapper;
+import com.nikita.springbootpj.repositories.CarCategoryRepository;
 import com.nikita.springbootpj.repositories.CarRepository;
+import com.nikita.springbootpj.repositories.CategoryRepository;
 import com.nikita.springbootpj.services.BookService;
 import com.nikita.springbootpj.services.CarService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,9 @@ public class CarServiceImplementation implements CarService {
     private final CarMapper carMapper;
     private final CarRepository carRepository;
     private final BookService bookService;
+
+    private final CarCategoryRepository carCategoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Value("${profile-folder.path}")
     private String folderPath;
@@ -89,6 +96,22 @@ public class CarServiceImplementation implements CarService {
             throw new IOException ("CarNotFound!");
         }
 
+    }
+
+    public List<CarDTO> getCarsOfCategory(String attribute){
+        Category category = categoryRepository.getCategoryByAttribute(attribute);
+        if(category != null){
+
+            List<CarCategory> carCategoryList = carCategoryRepository.getCarCategoriesByCategory(category);
+
+            List<CarDTO> carDTOList = new ArrayList<>();
+            for(CarCategory carCategory : carCategoryList){
+                carDTOList.add(carMapper.fromCarToDTO(carCategory.getCar()));
+            }
+            return carDTOList;
+        }else{
+            return null;
+        }
     }
 
     public CarDTO getCarById(int id){

@@ -40,15 +40,8 @@ public class CarCategoryServiceImplementation implements CarCategoryService {
         System.out.println(carCategoryToModifyDTO);
 
         Car car = carRepository.findById(carCategoryToModifyDTO.getCarId()).orElseThrow(() -> new RuntimeException("Car Not Found"));
-        Category category = categoryRepository.getCategoryByLabel(carCategoryToModifyDTO.getLabel());
-
-       /* if (category != null) {
-            category.setAttribute(carCategoryToModifyDTO.getAttribute());
-            categoryRepository.save(category);
-        }*/
-
-        System.out.println(carCategoryToModifyDTO.getLabel());
-        System.out.println(carCategoryToModifyDTO.getAttribute());
+        Category category = categoryRepository.getCategoryByAttribute(carCategoryToModifyDTO.getAttribute());
+        //se voglia la categories specifca ho bisogno dell'attributo
 
         if(carCategoryRepository.getCarCategoryByCarAndCategory(car,category) != null){
             return;

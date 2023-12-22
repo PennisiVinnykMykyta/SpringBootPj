@@ -19,12 +19,27 @@ public class CategoryController {
     @RequestMapping(value = "/add-or-update", method = {RequestMethod.PUT, RequestMethod.POST})
     public void addOrUpdateCategory(@RequestBody CategoryDTO categoryDTO){categoryService.saveOrUpdateCategory(categoryDTO);}
 
-    @DeleteMapping("/delete/{categoryId}")
-    public void deleteCategory(@PathVariable("categoryId") int categoryId){categoryService.deleteById(categoryId);}
+    @DeleteMapping("/delete/{categoryLabel}")
+    public void deleteCategory(@PathVariable("categoryLabel") String categoryLabel){categoryService.deleteByLabel(categoryLabel);}
 
+
+    @RequestMapping(value = "/update-attribute/{carId}", method = {RequestMethod.PUT,RequestMethod.POST})
+    public void updateAttribute(@RequestBody CategoryDTO categoryDTO, @PathVariable("carId") int carId){
+        categoryService.updateAttribute(categoryDTO,carId);
+    }
     @GetMapping("/list")
     public ResponseEntity<CategoryDTO> getAllCategories(){
         List<CategoryDTO> categoryDTOList = categoryService.getAllCategories();
+        if(categoryDTOList != null){
+            return new ResponseEntity(categoryDTOList, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/list/by-car/{carId}")
+    public ResponseEntity<CategoryDTO> getCategoriesOfCar(@PathVariable("carId") int carId){
+        List<CategoryDTO> categoryDTOList = categoryService.getCategoriesOfCar(carId);
         if(categoryDTOList != null){
             return new ResponseEntity(categoryDTOList, HttpStatus.OK);
         }else{

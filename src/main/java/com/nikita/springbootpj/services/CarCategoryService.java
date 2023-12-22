@@ -15,4 +15,5 @@ public interface CarCategoryService {
 
     List<CarCategoryDTO> getAllCarCategories();
 
+
 }

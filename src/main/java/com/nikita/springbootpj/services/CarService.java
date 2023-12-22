@@ -23,4 +23,6 @@ public interface CarService {
     void uploadCarPic(MultipartFile file, int carId) throws IOException;
 
     DownloadImageResponse downloadCarPic(int carId) throws IOException;
+
+    List<CarDTO> getCarsOfCategory(String label);
 }
